@@ -40,6 +40,8 @@ export function deserializeFromScriptArgument(deserializer: Deserializer): Trans
       return U32.deserialize(deserializer);
     case ScriptTransactionArgumentVariants.U256:
       return U256.deserialize(deserializer);
+    case ScriptTransactionArgumentVariants.Raw:
+        return MoveVector.deserialize(deserializer, U8);
     default:
       throw new Error(`Unknown variant index for ScriptTransactionArgument: ${index}`);
   }
