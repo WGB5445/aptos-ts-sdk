@@ -6,7 +6,7 @@
 import { Deserializer } from "../../bcs/deserializer";
 import { Serializable, Serializer } from "../../bcs/serializer";
 import { EntryFunctionBytes } from "../../bcs/serializable/entryFunctionBytes";
-import { Bool, U128, U16, U256, U32, U64, U8 } from "../../bcs/serializable/movePrimitives";
+import { Bool, Raw, U128, U16, U256, U32, U64, U8 } from "../../bcs/serializable/movePrimitives";
 import { MoveVector } from "../../bcs/serializable/moveStructs";
 import { AccountAddress } from "../../core";
 import { Identifier } from "./identifier";
@@ -41,7 +41,7 @@ export function deserializeFromScriptArgument(deserializer: Deserializer): Trans
     case ScriptTransactionArgumentVariants.U256:
       return U256.deserialize(deserializer);
     case ScriptTransactionArgumentVariants.Raw:
-        return MoveVector.deserialize(deserializer, U8);
+        return Raw.deserialize(deserializer);
     default:
       throw new Error(`Unknown variant index for ScriptTransactionArgument: ${index}`);
   }
