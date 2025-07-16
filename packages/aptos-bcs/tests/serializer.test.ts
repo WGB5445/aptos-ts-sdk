@@ -10,7 +10,6 @@ import {
   bcs,
   outOfRangeErrorMessage,
 } from "../src";
-import { beforeEach } from "vitest";
 /* eslint-disable @typescript-eslint/no-shadow */
 describe("BCS Serializer", () => {
 
@@ -98,5 +97,75 @@ describe("BCS Serializer", () => {
     expect(() => {
         bcs.U16.serialize(-1);
     }).toThrow(outOfRangeErrorMessage(-1, 0n, BigInt(MAX_U16_NUMBER)));
+  });
+  it("serializes a uint32", () => {
+    let serializedData = bcs.U32.serialize(4294967295);
+    expect(serializedData.toUint8Array()).toEqual(new Uint8Array([0xff, 0xff, 0xff, 0xff]));
+
+    serializedData = bcs.U32.serialize(4660);
+    expect(serializedData.toUint8Array()).toEqual(new Uint8Array([0x34, 0x12, 0x00, 0x00]));
+  });
+  it("throws when serializing uint32 with out of range value", () => {
+    expect(() => {
+        bcs.U32.serialize(4294967296);
+    }).toThrow(outOfRangeErrorMessage(4294967296, 0n, BigInt(MAX_U32_NUMBER)));
+
+    expect(() => {
+        bcs.U32.serialize(-1);
+    }).toThrow(outOfRangeErrorMessage(-1, 0n, BigInt(MAX_U32_NUMBER)));
+  });
+  it("serializes a uint64", () => {
+    let serializedData = bcs.U64.serialize(18446744073709551615n);
+    expect(serializedData.toUint8Array()).toEqual(new Uint8Array([0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff]));
+
+    serializedData = bcs.U64.serialize(4660n);
+    expect(serializedData.toUint8Array()).toEqual(new Uint8Array([0x34, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]));
+  });
+  it("throws when serializing uint64 with out of range value", () => {
+    expect(() => {
+        bcs.U64.serialize(18446744073709551616n);
+    }).toThrow(outOfRangeErrorMessage(18446744073709551616n, 0n, MAX_U64_BIG_INT));
+
+    expect(() => {
+        bcs.U64.serialize(-1n);
+    }).toThrow(outOfRangeErrorMessage(-1n, 0n, MAX_U64_BIG_INT));
+  });
+  it("serializes a uint128", () => {
+    let serializedData = bcs.U128.serialize(340282366920938463463374607431768211455n);
+    expect(serializedData.toUint8Array()).toEqual(
+      new Uint8Array([
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+      ])
+    );
+  });
+  it("throws when serializing uint128 with out of range value", () => {
+    expect(() => {
+        bcs.U128.serialize(340282366841710300949128831971969468211455n);
+    }).toThrow(outOfRangeErrorMessage(340282366841710300949128831971969468211455n, 0n, MAX_U128_BIG_INT));
+
+    expect(() => {
+        bcs.U128.serialize(-1n);
+    }).toThrow(outOfRangeErrorMessage(-1n, 0n, MAX_U128_BIG_INT));
+  });
+  it("serializes and deserializes a struct", () => {
+    const MyStruct = bcs.Struct("MyStruct", {
+      foo: bcs.U8,
+      bar: bcs.U64,
+      flag: bcs.Bool,
+    });
+
+    const value = { foo: 42, bar: 18446744073709551615n, flag: true };
+    const serialized = MyStruct.serialize(value);
+    expect(serialized.toUint8Array()).toEqual(
+      new Uint8Array([
+        42, // foo
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, // bar (LE)
+        0x01, // flag
+      ])
+    );
+
+    const deserialized = MyStruct.deserialize(serialized.toUint8Array());
+    expect(deserialized).toEqual(value);
   });
 });

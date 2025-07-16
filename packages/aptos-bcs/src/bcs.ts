@@ -289,7 +289,7 @@ export const Uleb128Type = new BcsType<number>({
     return ser.toUint8Array();
   },
   validate: (value) => {
-    if (value < 0 || value > 0xffffffff) {
+    if (value < 0 || value > MAX_U128_BIG_INT) {
       throw new Error(`Uleb128 out of range: ${value}`);
     }
   },
@@ -468,6 +468,72 @@ const OptionType = <T>(type: BcsType<T>): BcsType<T | null> =>
   });
 export const Option = <T>(type: BcsType<T>): BcsType<T | null> => OptionType(type);
 
+
+export function StructType<T extends Record<string, BcsType<any, any>>>(
+  name: string,
+  fields: T,
+  options?: Omit<
+    BcsTypeOptions<
+      { [K in keyof T]: T[K] extends BcsType<infer U, any> ? U : never },
+      { [K in keyof T]: T[K] extends BcsType<any, infer U> ? U : never }
+    >,
+    'name'
+  >,
+): BcsType<
+  { [K in keyof T]: T[K] extends BcsType<infer U, any> ? U : never },
+  { [K in keyof T]: T[K] extends BcsType<any, infer U> ? U : never }
+> {
+  const canonicalOrder = Object.entries(fields);
+
+  return new BcsType({
+    name,
+    read: (reader) => {
+      const result: Record<string, unknown> = {};
+      for (const [field, type] of canonicalOrder) {
+        result[field] = (type as BcsType<any, any>).read(reader);
+      }
+      return result as any;
+    },
+    write: (value, writer) => {
+      for (const [field, type] of canonicalOrder) {
+        (type as BcsType<any, any>).write(value[field], writer);
+      }
+    },
+    serialize: (value) => {
+      const ser = new Serializer();
+      for (const [field, type] of canonicalOrder) {
+        (type as BcsType<any, any>).write(value[field], ser);
+      }
+      return ser.toUint8Array();
+    },
+    validate: (value) => {
+      options?.validate?.(value);
+      if (typeof value !== 'object' || value == null) {
+        throw new TypeError(`Expected object, found ${typeof value}`);
+      }
+      for (const [field, type] of canonicalOrder) {
+        (type as BcsType<any, any>).validate(value[field]);
+      }
+    },
+    ...options,
+  });
+}
+
+export const Struct = <T extends Record<string, BcsType<any, any>>>(
+  name: string,
+  fields: T,
+  options?: Omit<
+    BcsTypeOptions<
+      { [K in keyof T]: T[K] extends BcsType<infer U, any> ? U : never },
+      { [K in keyof T]: T[K] extends BcsType<any, infer U> ? U : never }
+    >,
+    'name'
+  >,
+): BcsType<
+  { [K in keyof T]: T[K] extends BcsType<infer U, any> ? U : never },
+  { [K in keyof T]: T[K] extends BcsType<any, infer U> ? U : never }
+> => StructType(name, fields, options);
+
 export const bcs = {
   U8: U8Type,
   U16: U16Type,
@@ -482,4 +548,5 @@ export const bcs = {
   String: StringType,
   Vector,
   Option,
+  Struct,
 };

@@ -1,38 +1,43 @@
 import { describe, it, expect } from 'vitest';
 import { UpgradePolicy, PackageDep, Any, ModuleMetadata, PackageMetadata } from '../src/index';
-import { Deserializer, Serializer } from '@aptos-labs/ts-sdk';
 
 describe('PackageMetadata', () => {
+
   it('should create UpgradePolicy instance', () => {
-    const policy = new UpgradePolicy(1);
-    expect(policy.value).toBe(1);
+    const policy = { policy: 1 };
+    expect(policy.policy).toBe(1);
   });
+
 
   it('should create PackageDep instance', () => {
-    const dep = new PackageDep({ account: '0x1', package_name: 'test-package' });
-    expect(dep.value.account).toBe('0x1');
-    expect(dep.value.package_name).toBe('test-package');
+    const account = new Uint8Array(32); account[31] = 1;
+    const dep = { account, package_name: 'test-package' };
+    expect(dep.account).toEqual(account);
+    expect(dep.package_name).toBe('test-package');
   });
+
 
   it('should create Any instance', () => {
-    const any = new Any({ type_name: 'test-type', data: [1, 2, 3] });
-    expect(any.value.type_name).toBe('test-type');
-    expect(any.value.data).toEqual([1, 2, 3]);
+    const any = { type_name: 'test-type', data: [1, 2, 3] };
+    expect(any.type_name).toBe('test-type');
+    expect(any.data).toEqual([1, 2, 3]);
   });
+
 
   it('should create ModuleMetadata instance', () => {
-    const module = new ModuleMetadata({ name: 'test-module', source: [1, 2], source_map: [3, 4] });
-    expect(module.value.name).toBe('test-module');
-    expect(module.value.source).toEqual([1, 2]);
-    expect(module.value.source_map).toEqual([3, 4]);
+    const module = { name: 'test-module', source: [1, 2], source_map: [3, 4], extension: null };
+    expect(module.name).toBe('test-module');
+    expect(module.source).toEqual([1, 2]);
+    expect(module.source_map).toEqual([3, 4]);
   });
+
 
   it('should create PackageMetadata instance', () => {
-    const policy = new UpgradePolicy(1);
-    const dep = new PackageDep({ account: '0x1', package_name: 'test-package' });
-    const module = new ModuleMetadata({ name: 'test-module', source: [1, 2], source_map: [3, 4] });
-
-    const metadata = new PackageMetadata({
+    const policy = { policy: 1 };
+    const account = new Uint8Array(32); account[31] = 1;
+    const dep = { account, package_name: 'test-package' };
+    const module = { name: 'test-module', source: [1, 2], source_map: [3, 4], extension: null };
+    const metadata = {
       name: 'test-package',
       upgrade_policy: policy,
       upgrade_number: BigInt(1),
@@ -40,67 +45,57 @@ describe('PackageMetadata', () => {
       manifest: [1, 2, 3],
       modules: [module],
       deps: [dep],
-    });
-
-    expect(metadata.value.name).toBe('test-package');
-    expect(metadata.value.upgrade_number).toBe(BigInt(1));
-    expect(metadata.value.source_digest).toBe('digest');
+      extension: null,
+    };
+    expect(metadata.name).toBe('test-package');
+    expect(metadata.upgrade_number).toBe(BigInt(1));
+    expect(metadata.source_digest).toBe('digest');
   });
+
 
   it('should serialize and deserialize UpgradePolicy', () => {
-    const policy = new UpgradePolicy(1);
-    const serializer = new Serializer();
-    policy.serialize(serializer);
-
-    const deserializer = new Deserializer(serializer.toUint8Array());
-    const deserializedPolicy = UpgradePolicy.deserialize(deserializer);
-
-    expect(deserializedPolicy.value).toBe(1);
+    const policy = { policy: 1 };
+    const bytes = UpgradePolicy.serialize(policy).toUint8Array();
+    const deserializedPolicy = UpgradePolicy.deserialize(bytes);
+    expect(deserializedPolicy.policy).toBe(1);
   });
+
 
   it('should serialize and deserialize PackageDep', () => {
-    const dep = new PackageDep({ account: '0x1', package_name: 'test-package' });
-    const serializer = new Serializer();
-    dep.serialize(serializer);
-
-    const deserializer = new Deserializer(serializer.toUint8Array());
-    const deserializedDep = PackageDep.deserialize(deserializer);
-
-    expect(deserializedDep.value.account).toBe('0x1');
-    expect(deserializedDep.value.package_name).toBe('test-package');
+    const account = new Uint8Array(32); account[31] = 1;
+    const dep = { account, package_name: 'test-package' };
+    const bytes = PackageDep.serialize(dep).toUint8Array();
+    const deserializedDep = PackageDep.deserialize(bytes);
+    expect(deserializedDep.account).toEqual(account);
+    expect(deserializedDep.package_name).toBe('test-package');
   });
+
 
   it('should serialize and deserialize Any', () => {
-    const any = new Any({ type_name: 'test-type', data: [1, 2, 3] });
-    const serializer = new Serializer();
-    any.serialize(serializer);
-
-    const deserializer = new Deserializer(serializer.toUint8Array());
-    const deserializedAny = Any.deserialize(deserializer);
-
-    expect(deserializedAny.value.type_name).toBe('test-type');
-    expect(deserializedAny.value.data).toEqual([1, 2, 3]);
+    const any = { type_name: 'test-type', data: [1, 2, 3] };
+    const bytes = Any.serialize(any).toUint8Array();
+    const deserializedAny = Any.deserialize(bytes);
+    expect(deserializedAny.type_name).toBe('test-type');
+    expect(deserializedAny.data).toEqual([1, 2, 3]);
   });
+
 
   it('should serialize and deserialize ModuleMetadata', () => {
-    const module = new ModuleMetadata({ name: 'test-module', source: [1, 2], source_map: [3, 4] });
-    const serializer = new Serializer();
-    module.serialize(serializer);
-
-    const deserializer = new Deserializer(serializer.toUint8Array());
-    const deserializedModule = ModuleMetadata.deserialize(deserializer);
-
-    expect(deserializedModule.value.name).toBe('test-module');
-    expect(deserializedModule.value.source).toEqual([1, 2]);
-    expect(deserializedModule.value.source_map).toEqual([3, 4]);
+    const module = { name: 'test-module', source: [1, 2], source_map: [3, 4], extension: null };
+    const bytes = ModuleMetadata.serialize(module).toUint8Array();
+    const deserializedModule = ModuleMetadata.deserialize(bytes);
+    expect(deserializedModule.name).toBe('test-module');
+    expect(deserializedModule.source).toEqual([1, 2]);
+    expect(deserializedModule.source_map).toEqual([3, 4]);
   });
 
-  it('should serialize and deserialize PackageMetadata', () => {
-    const policy = new UpgradePolicy(1);
-    const dep = new PackageDep({ account: '0x1', package_name: 'test-package' });
-    const module = new ModuleMetadata({ name: 'test-module', source: [1, 2], source_map: [3, 4] });
 
-    const metadata = new PackageMetadata({
+  it('should serialize and deserialize PackageMetadata', () => {
+    const policy = { policy: 1 };
+    const account = new Uint8Array(32); account[31] = 1;
+    const dep = { account, package_name: 'test-package' };
+    const module = { name: 'test-module', source: [1, 2], source_map: [3, 4], extension: null };
+    const metadata = {
       name: 'test-package',
       upgrade_policy: policy,
       upgrade_number: BigInt(1),
@@ -108,16 +103,12 @@ describe('PackageMetadata', () => {
       manifest: [1, 2, 3],
       modules: [module],
       deps: [dep],
-    });
-
-    const serializer = new Serializer();
-    metadata.serialize(serializer);
-
-    const deserializer = new Deserializer(serializer.toUint8Array());
-    const deserializedMetadata = PackageMetadata.deserialize(deserializer);
-
-    expect(deserializedMetadata.value.name).toBe('test-package');
-    expect(deserializedMetadata.value.upgrade_number).toBe(BigInt(1));
-    expect(deserializedMetadata.value.source_digest).toBe('digest');
+      extension: null,
+    };
+    const bytes = PackageMetadata.serialize(metadata).toUint8Array();
+    const deserializedMetadata = PackageMetadata.deserialize(bytes);
+    expect(deserializedMetadata.name).toBe('test-package');
+    expect(deserializedMetadata.upgrade_number).toBe(BigInt(1));
+    expect(deserializedMetadata.source_digest).toBe('digest');
   });
 });
