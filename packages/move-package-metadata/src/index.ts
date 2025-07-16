@@ -1,4 +1,4 @@
-import { Deserializer, Serializable, Serializer, U8 } from '@aptos-labs/ts-sdk';
+import { Deserializer, Hex, Serializable, Serializer, U8 } from '@aptos-labs/ts-sdk';
 
 /*
     struct PackageMetadata has copy, drop, store {
@@ -49,146 +49,147 @@ import { Deserializer, Serializable, Serializer, U8 } from '@aptos-labs/ts-sdk';
 
 */
 
-export class UpgradePolicy extends Serializable {
-  policy: number;
-  constructor(policy: number) {
-    super();
-    this.policy = policy;
-  }
-
-  override serialize(serializer: Serializer): void {
-    serializer.serializeU8(this.policy);
-  }
-  static deserialize(deserializer: Deserializer): UpgradePolicy {
-    return new UpgradePolicy(deserializer.deserializeU8());
-  }
+function createSerializableClass<T, N extends string = string>(
+    className: N,
+    serializeFn: (serializer: Serializer, data: T) => void,
+    deserializeFn: (deserializer: Deserializer) => T
+): {
+    new (data: T): Serializable & { value: T; name: N };
+    deserialize: (deserializer: Deserializer) => Serializable & { value: T; name: N };
+    className: N;
+} {
+    const cls = {
+        [className]: class implements Serializable {
+            static className: N = className;
+            private data: T;
+            constructor(data: T) {
+                this.data = data;
+            }
+            get value(): T {
+                return this.data;
+            }
+            get name(): N {
+                return className;
+            }
+            bcsToBytes(): Uint8Array {
+                const serializer = new Serializer();
+                this.serialize(serializer);
+                return serializer.toUint8Array();
+            }
+            bcsToHex(): Hex {
+                return new Hex( this.bcsToBytes() );
+            }
+            toStringWithoutPrefix(): string {
+                return this.bcsToHex().toStringWithoutPrefix();
+            }
+            toString(): string {
+                return this.bcsToHex().toString();
+            }
+            toJSON() {
+                return this.data;
+            }
+            [Symbol.for('nodejs.util.inspect.custom')]() {
+                return this.data;
+            }
+            serialize(serializer: Serializer): void {
+                serializeFn(serializer, this.data);
+            }
+            static deserialize(deserializer: Deserializer): Serializable & { value: T; name: N } {
+                const data = deserializeFn(deserializer);
+                return new (this as any)(data);
+            }
+        }
+    }[className];
+    cls.className = className;
+    return cls as any;
 }
 
-export class PackageDep extends Serializable {
-  account: string;
-  package_name: string;
+// UpgradePolicy
+export const UpgradePolicy = createSerializableClass<number>(
+    "UpgradePolicy",
+    (serializer, data) => serializer.serializeU8(data),
+    (deserializer) => deserializer.deserializeU8()
+);
 
-  constructor(account: string, package_name: string) {
-    super();
-    this.account = account;
-    this.package_name = package_name;
-  }
 
-  override serialize(serializer: Serializer): void {
-    serializer.serializeStr(this.account);
-    serializer.serializeStr(this.package_name);
-  }
-  static deserialize(deserializer: Deserializer): PackageDep {
-    return new PackageDep(deserializer.deserializeStr(), deserializer.deserializeStr());
-  }
-}
+// PackageDep
+export const PackageDep = createSerializableClass<{ account: string; package_name: string }>(
+  "PackageDep",
+  (serializer, data) => {
+    serializer.serializeStr(data.account);
+    serializer.serializeStr(data.package_name);
+  },
+  (deserializer) => ({
+    account: deserializer.deserializeStr(),
+    package_name: deserializer.deserializeStr(),
+  })
+);
 
-export class Any extends Serializable {
-  type_name: string;
-  data: Array<number>;
+// Any
+export const Any = createSerializableClass<{ type_name: string; data: number[] }>(
+  "Any",
+  (serializer, data) => {
+    serializer.serializeStr(data.type_name);
+    serializer.serializeVector(data.data.map((num) => new U8(num)));
+  },
+  (deserializer) => ({
+    type_name: deserializer.deserializeStr(),
+    data: deserializer.deserializeVector(U8).map((num) => num.value),
+  })
+);
 
-  constructor(type_name: string, data: Array<number>) {
-    super();
-    this.type_name = type_name;
-    this.data = data;
-  }
-
-  override serialize(serializer: Serializer): void {
-    serializer.serializeStr(this.type_name);
-    serializer.serializeVector(this.data.map((num) => new U8(num)));
-  }
-
-  static deserialize(deserializer: Deserializer): Any {
-    return new Any(
-      deserializer.deserializeStr(),
-      deserializer.deserializeVector(U8).map((num) => num.value),
-    );
-  }
-}
-
-export class ModuleMetadata extends Serializable {
+// ModuleMetadata
+export const ModuleMetadata = createSerializableClass<{
   name: string;
-  source: Array<number>;
-  source_map: Array<number>;
-  extension?: Any;
+  source: number[];
+  source_map: number[];
+  extension?: InstanceType<typeof Any>;
+}>(
+  "ModuleMetadata",
+  (serializer, data) => {
+    serializer.serializeStr(data.name);
+    serializer.serializeVector(data.source.map((num) => new U8(num)));
+    serializer.serializeVector(data.source_map.map((num) => new U8(num)));
+    serializer.serializeOption(data.extension);
+  },
+  (deserializer) => ({
+    name: deserializer.deserializeStr(),
+    source: deserializer.deserializeVector(U8).map((num) => num.value),
+    source_map: deserializer.deserializeVector(U8).map((num) => num.value),
+    extension: deserializer.deserializeOption(Any),
+  })
+);
 
-  constructor(name: string, source: Array<number>, source_map: Array<number>, extension?: Any) {
-    super();
-    this.name = name;
-    this.source = source;
-    this.source_map = source_map;
-    this.extension = extension;
-  }
-
-  override serialize(serializer: Serializer): void {
-    serializer.serializeStr(this.name);
-    serializer.serializeVector(this.source.map((num) => new U8(num)));
-    serializer.serializeVector(this.source_map.map((num) => new U8(num)));
-    serializer.serializeOption(this.extension);
-  }
-
-  static deserialize(deserializer: Deserializer): ModuleMetadata {
-    return new ModuleMetadata(
-      deserializer.deserializeStr(),
-      deserializer.deserializeVector(U8).map((num) => num.value),
-      deserializer.deserializeVector(U8).map((num) => num.value),
-      deserializer.deserializeOption(Any),
-    );
-  }
-}
-
-export class PackageMetadata extends Serializable {
+// PackageMetadata
+export const PackageMetadata = createSerializableClass<{
   name: string;
-  upgrade_policy: UpgradePolicy;
+  upgrade_policy: InstanceType<typeof UpgradePolicy>;
   upgrade_number: bigint;
   source_digest: string;
-  manifest: Array<number>;
-  modules: Array<ModuleMetadata>;
-  deps: Array<PackageDep>;
-  extension?: Any;
-
-  constructor(
-    name: string,
-    upgrade_policy: UpgradePolicy,
-    upgrade_number: bigint,
-    source_digest: string,
-    manifest: Array<number>,
-    modules: Array<ModuleMetadata>,
-    deps: Array<PackageDep>,
-    extension?: Any,
-  ) {
-    super();
-    this.name = name;
-    this.upgrade_policy = upgrade_policy;
-    this.upgrade_number = upgrade_number;
-    this.source_digest = source_digest;
-    this.manifest = manifest;
-    this.modules = modules;
-    this.deps = deps;
-    this.extension = extension;
-  }
-
-  override serialize(serializer: Serializer): void {
-    serializer.serializeStr(this.name);
-    this.upgrade_policy.serialize(serializer);
-    serializer.serializeU64(this.upgrade_number);
-    serializer.serializeStr(this.source_digest);
-    serializer.serializeVector(this.manifest.map((num) => new U8(num)));
-    serializer.serializeVector(this.modules);
-    serializer.serializeVector(this.deps);
-    serializer.serializeOption(this.extension);
-  }
-
-  static deserialize(deserializer: Deserializer): PackageMetadata {
-    return new PackageMetadata(
-      deserializer.deserializeStr(),
-      UpgradePolicy.deserialize(deserializer),
-      deserializer.deserializeU64(),
-      deserializer.deserializeStr(),
-      deserializer.deserializeVector(U8).map((num) => num.value),
-      deserializer.deserializeVector(ModuleMetadata),
-      deserializer.deserializeVector(PackageDep),
-      deserializer.deserializeOption(Any),
-    );
-  }
-}
+  manifest: number[];
+  modules: Array<InstanceType<typeof ModuleMetadata>>;
+  deps: Array<InstanceType<typeof PackageDep>>;
+  extension?: InstanceType<typeof Any>;
+}>(
+  "PackageMetadata",
+  (serializer, data) => {
+    serializer.serializeStr(data.name);
+    data.upgrade_policy.serialize(serializer);
+    serializer.serializeU64(data.upgrade_number);
+    serializer.serializeStr(data.source_digest);
+    serializer.serializeVector(data.manifest.map((num) => new U8(num)));
+    serializer.serializeVector(data.modules);
+    serializer.serializeVector(data.deps);
+    serializer.serializeOption(data.extension);
+  },
+  (deserializer) => ({
+    name: deserializer.deserializeStr(),
+    upgrade_policy: UpgradePolicy.deserialize(deserializer),
+    upgrade_number: deserializer.deserializeU64(),
+    source_digest: deserializer.deserializeStr(),
+    manifest: deserializer.deserializeVector(U8).map((num) => num.value),
+    modules: deserializer.deserializeVector(ModuleMetadata),
+    deps: deserializer.deserializeVector(PackageDep),
+    extension: deserializer.deserializeOption(Any),
+  })
+);
