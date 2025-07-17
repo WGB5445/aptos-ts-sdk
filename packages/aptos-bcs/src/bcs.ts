@@ -1,3 +1,9 @@
+
+// Copyright (c) Mysten Labs, Inc.
+// SPDX-License-Identifier: Apache-2.0
+// Modified and extended by WGB5445, 2025
+// This file contains original code from Mysten Labs and additional changes and extensions by WGB5445.
+// See commit history for details.
 import { Deserializer } from './deserializer';
 import {
   MAX_U128_BIG_INT,
@@ -519,6 +525,42 @@ export function StructType<T extends Record<string, BcsType<any, any>>>(
   });
 }
 
+export type EnumOutputShape<
+  T extends Record<string, unknown>,
+  Keys extends string = Extract<keyof T, string>,
+  Values = T[keyof T] extends infer Type ? (Type extends BcsType<infer U> ? U : never) : never,
+> = 0 extends Values
+  ? EnumOutputShapeWithKeys<T, never>
+  : 0n extends Values
+    ? EnumOutputShapeWithKeys<T, never>
+    : '' extends Values
+      ? EnumOutputShapeWithKeys<T, never>
+      : false extends Values
+        ? EnumOutputShapeWithKeys<T, never>
+        : EnumOutputShapeWithKeys<T, Keys>;
+
+export type Simplify<T> = {
+  [K in keyof T]: T[K];
+  // eslint-disable-next-line @typescript-eslint/ban-types
+} & {};
+
+export type EnumOutputShapeWithKeys<T extends Record<string, unknown>, Keys extends string> = {
+  [K in keyof T]: Exclude<Keys, K> extends infer Empty extends string
+    ? Simplify<
+        { [K2 in K]: T[K] } & { [K in Empty]?: never } & {
+          $kind: K;
+        }
+      >
+    : never;
+}[keyof T];
+
+export type EnumInputShape<T extends Record<string, unknown>> = {
+  [K in keyof T]: { [K2 in K]: T[K] };
+}[keyof T];
+
+
+
+
 export const Struct = <T extends Record<string, BcsType<any, any>>>(
   name: string,
   fields: T,
@@ -533,6 +575,80 @@ export const Struct = <T extends Record<string, BcsType<any, any>>>(
   { [K in keyof T]: T[K] extends BcsType<infer U, any> ? U : never },
   { [K in keyof T]: T[K] extends BcsType<any, infer U> ? U : never }
 > => StructType(name, fields, options);
+
+export function EnumType<T extends Record<string, BcsType<any> | null>>(
+  name: string,
+  values: T,
+  options?: Omit<
+    BcsTypeOptions<
+      EnumOutputShape<{
+        [K in keyof T]: T[K] extends BcsType<infer U, any> ? U : true;
+      }>,
+      EnumInputShape<{
+        [K in keyof T]: T[K] extends BcsType<any, infer U> ? U : boolean | object | null;
+      }>
+    >,
+    'name'
+  >,
+): BcsType<
+  EnumOutputShape<{
+    [K in keyof T]: T[K] extends BcsType<infer U, any> ? U : true;
+  }>,
+  EnumInputShape<{
+    [K in keyof T]: T[K] extends BcsType<any, infer U> ? U : boolean | object | null;
+  }>
+> {
+  const canonicalOrder = Object.entries(values as object);
+  return new BcsType({
+    name,
+    read: (reader) => {
+      const index = Uleb128Type.read(reader);
+      const enumEntry = canonicalOrder[index];
+      if (!enumEntry) {
+        throw new TypeError(`Unknown value ${index} for enum ${name}`);
+      }
+      const [kind, type] = enumEntry;
+      return {
+        [kind]: type?.read(reader) ?? true,
+        $kind: kind,
+      } as never;
+    },
+    write: (value, writer) => {
+      const [name, val] = Object.entries(value).filter(([name]) =>
+        Object.hasOwn(values, name),
+      )[0];
+      for (let i = 0; i < canonicalOrder.length; i++) {
+        const [optionName, optionType] = canonicalOrder[i];
+        if (optionName === name) {
+          Uleb128Type.write(i, writer);
+          optionType?.write(val, writer);
+          return;
+        }
+      }
+    },
+    ...options,
+    validate: (value) => {
+      options?.validate?.(value);
+      if (typeof value !== 'object' || value == null) {
+        throw new TypeError(`Expected object, found ${typeof value}`);
+      }
+      const keys = Object.keys(value).filter(
+        (k) => value[k] !== undefined && Object.hasOwn(values, k),
+      );
+      if (keys.length !== 1) {
+        throw new TypeError(
+          `Expected object with one key, but found ${keys.length} for type ${name}`,
+        );
+      }
+      const [variant] = keys;
+      if (!Object.hasOwn(values, variant)) {
+        throw new TypeError(`Invalid enum variant ${variant}`);
+      }
+    },
+  });
+}
+
+export const Enum = EnumType;
 
 export const bcs = {
   U8: U8Type,
@@ -549,4 +665,5 @@ export const bcs = {
   Vector,
   Option,
   Struct,
+  Enum,
 };

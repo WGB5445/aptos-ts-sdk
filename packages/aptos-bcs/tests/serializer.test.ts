@@ -168,4 +168,38 @@ describe("BCS Serializer", () => {
     const deserialized = MyStruct.deserialize(serialized.toUint8Array());
     expect(deserialized).toEqual(value);
   });
+
+  it("serializes and deserializes an enum", () => {
+    // 定义一个简单的 Enum 类型
+    const MyEnum = bcs.Enum("MyEnum", {
+      VariantA: bcs.U8,
+      VariantB: bcs.Bool,
+      VariantC: bcs.String,
+    });
+
+    // 测试 VariantA
+    const valueA = { VariantA: 123 };
+    const serializedA = MyEnum.serialize(valueA);
+    expect(serializedA.toUint8Array()).toEqual(new Uint8Array([0, 123]));
+    const deserializedA = MyEnum.deserialize(serializedA.toUint8Array());
+    expect(deserializedA.$kind == "VariantA").toBe(true);
+    expect(deserializedA.VariantA).toEqual(valueA.VariantA);
+
+    // 测试 VariantB
+    const valueB = { VariantB: true };
+    const serializedB = MyEnum.serialize(valueB);
+    expect(serializedB.toUint8Array()).toEqual(new Uint8Array([1, 1]));
+    const deserializedB = MyEnum.deserialize(serializedB.toUint8Array());
+    expect(deserializedB.$kind == "VariantB").toBe(true);
+    expect(deserializedB.VariantB).toEqual(valueB.VariantB);
+
+    // 测试 VariantC
+    const valueC = { VariantC: "abc" };
+    const serializedC = MyEnum.serialize(valueC);
+    expect(serializedC.toUint8Array()).toEqual(new Uint8Array([2, 3, 97, 98, 99]));
+    const deserializedC = MyEnum.deserialize(serializedC.toUint8Array());
+    expect(deserializedC.$kind == "VariantC").toBe(true);
+    expect(deserializedC.VariantC).toEqual(valueC.VariantC);
+  });
+  
 });
