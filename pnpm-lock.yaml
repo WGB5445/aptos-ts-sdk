@@ -41,6 +41,43 @@ importers:
         specifier: 3.2.4
         version: 3.2.4(@types/node@24.0.10)
 
+  packages/aptos-disassemble:
+    dependencies:
+      aptos-bcs:
+        specifier: workspace:*
+        version: link:../aptos-bcs
+    devDependencies:
+      '@eslint/js':
+        specifier: ^9.30.1
+        version: 9.30.1
+      '@types/node':
+        specifier: 24.0.10
+        version: 24.0.10
+      '@typescript-eslint/eslint-plugin':
+        specifier: 8.35.1
+        version: 8.35.1(@typescript-eslint/parser@8.35.1(eslint@9.30.1)(typescript@5.8.3))(eslint@9.30.1)(typescript@5.8.3)
+      '@typescript-eslint/parser':
+        specifier: 8.35.1
+        version: 8.35.1(eslint@9.30.1)(typescript@5.8.3)
+      '@vitest/coverage-v8':
+        specifier: 3.2.4
+        version: 3.2.4(vitest@3.2.4(@types/node@24.0.10))
+      eslint:
+        specifier: 9.30.1
+        version: 9.30.1
+      prettier:
+        specifier: 3.6.2
+        version: 3.6.2
+      tsup:
+        specifier: 8.5.0
+        version: 8.5.0(postcss@8.5.6)(typescript@5.8.3)
+      typescript:
+        specifier: 5.8.3
+        version: 5.8.3
+      vitest:
+        specifier: 3.2.4
+        version: 3.2.4(@types/node@24.0.10)
+
   packages/move-package-metadata:
     dependencies:
       aptos-bcs:
