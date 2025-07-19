@@ -4,6 +4,43 @@ import { fromU8, SerializedType } from "./serializedType";
 // --- Extra Index Types for Bytecode ---
 export type FieldInstantiationIndex = number;
 
+export interface MoveModule {
+    magic: number;
+    version: number;
+    selfModuleHandleIdx: number;
+    module_handles: Array<{ address: number; name: number }>;
+    struct_handles: Array<{
+        module: number;
+        name: number;
+        abilities: number;
+        type_parameters: { constraints: number; is_phantom: boolean }[];
+    }>;
+    function_handles: Array<{
+        module: number;
+        name: number;
+        parameters: number;
+        return_: number;
+        type_parameters: number[];
+        access_specifiers?: any;
+        attributes?: any;
+    }>;
+    function_inst: Array<{ handle: number; type_parameters: number }>;
+    signatures: Array<Array<SignatureToken>>;
+    constant_pool: Array<Constant>;
+    identifiers: Array<string>;
+    address_identifiers: Array<string>;
+    metadatas: Array<Metadata>;
+    function_defs: Array<FunctionDefinition>;
+    struct_defs: Array<StructDefinition>;
+    field_defs: Array<FieldHandle>;
+    field_insts: Array<FieldInstantiation>;
+    friend_decls: Array<ModuleHandle>;
+    variant_field_handles: Array<VariantFieldHandle>;
+    variant_field_inst: Array<VariantFieldInstantiation>;
+    struct_variant_handles: Array<StructVariantHandle>;
+    struct_variant_inst: Array<StructVariantInstantiation>;
+}
+
 export interface ModuleHandle {
   address: AddressIdentifierIndex; 
   name: IdentifierIndex; 
@@ -954,6 +991,8 @@ export function load_code(deserializer: Deserializer, version: number): Array<By
     });
 }
 
+
+
 export const AbilityValues = {
   Copy: 1,
   Drop: 2,
@@ -970,7 +1009,7 @@ export function parseAbilities(abilities: number): string[] {
   return result;
 }
 
-export function parseSignatureToken(token: SignatureToken): string | { struct: number } | { struct: number; typeParams: Array<string | { struct: number } | { typeParam: number }>  } | { typeParam: number } {
+export function parseSignatureToken(token: SignatureToken, module: MoveModule): string {
   switch (token.kind) {
     case "Bool":
     case "U8":
@@ -983,29 +1022,42 @@ export function parseSignatureToken(token: SignatureToken): string | { struct: n
     case "Signer":
       return token.kind.toLowerCase();
     case "Vector":
-      return `vector<${parseSignatureToken(token.type)}>`;
+      return `vector<${parseSignatureToken(token.type, module)}>`;
     case "Reference":
-      return `&${parseSignatureToken(token.type)}`;
+      return `&${parseSignatureToken(token.type, module)}`;
     case "MutableReference":
-      return `&mut ${parseSignatureToken(token.type)}`;
-    case "Struct":
-      return { struct: token.handle };
-    case "StructInstantiation":
-      return {
-        struct: token.handle,
-        typeParams: token.typeParams.map(parseSignatureToken),
-      };
+      return `&mut ${parseSignatureToken(token.type, module)}`;
+    case "Struct": {
+      const struct_handle = module.struct_handles[token.handle];
+      const struct_module_idx = struct_handle.module;
+      const struct_module = module.module_handles[struct_module_idx];
+      const moduleName = module.identifiers[struct_module.name];
+      const structName = module.identifiers[struct_handle.name];
+      if (struct_module_idx === module.selfModuleHandleIdx) {
+        return structName;
+      } else {
+        return `${moduleName}::${structName}`;
+      }
+    }
+    case "StructInstantiation": {
+      const struct_handle = module.struct_handles[token.handle];
+      const struct_module_idx = struct_handle.module;
+      const struct_module = module.module_handles[struct_module_idx];
+      const moduleName = module.identifiers[struct_module.name];
+      const structName = module.identifiers[struct_handle.name];
+      const typeParams = token.typeParams.map((tp) => parseSignatureToken(tp, module)).join(", ");
+      if (struct_module_idx === module.selfModuleHandleIdx) {
+        return `${structName}<${typeParams}>`;
+      } else {
+        return `${moduleName}::${structName}<${typeParams}>`;
+      }
+    }
     case "TypeParameter":
-      return { typeParam: token.index };
+      return `T${token.index}`;
     case "Function":
-      // return {
-      //   function: {
-      //     args: token.args.map(parseSignatureToken),
-      //     results: token.results.map(parseSignatureToken),
-      //     abilities: parseAbilities(token.abilities),
-      //   },
-      // };
+      return `fn(${token.args.map((a) => parseSignatureToken(a, module)).join(", ")}) -> (${token.results.map((r) => parseSignatureToken(r, module)).join(", ")})`;
     default:
       throw new Error(`Unknown SignatureToken kind: ${(token as any).kind}`);
   }
 }
+

@@ -60,25 +60,12 @@ describe('disassembleMoveModule', () => {
                 { module: 6, name: 39, abilities: 7, type_parameters: [Array] }
             */
 
-        let struct_defs = disassembleMoveModule(module).struct_defs;
-
-        let struct_handles = disassembleMoveModule(module).struct_handles;
-
-        let identifier = (disassembleMoveModule(module).identifiers);
-
-        console.log(JSON.stringify(identifier, (key, value) =>
+        console.log(JSON.stringify(disassembleMoveModule(module), (key, value) =>
             typeof value === 'bigint' ? value.toString() : value,
             2
         ));
 
-        console.log(JSON.stringify(struct_handles, (key, value) =>
-            typeof value === 'bigint' ? value.toString() : value,
-            2
-        ));
-        console.log(JSON.stringify(struct_defs, (key, value) =>
-            typeof value === 'bigint' ? value.toString() : value,
-            2
-        ));
+
 
         /*
             [

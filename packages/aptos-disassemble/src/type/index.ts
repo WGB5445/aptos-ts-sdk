@@ -1,45 +1,9 @@
 import { bcs, Deserializer } from "aptos-bcs";
-import { AccessSpecifier, CodeUnit, Constant, FieldDefinition, FieldHandle, FieldInstantiation, FunctionAttribute, FunctionDefinition, load_code, load_signature_token, Metadata, ModuleHandle, SignatureToken, StructDefinition, StructDefInstantiation, StructVariantHandle, StructVariantInstantiation, VariantDefinition, VariantFieldHandle, VariantFieldInstantiation, Visibility } from "./compiledModule";
+import { AccessSpecifier, CodeUnit, Constant, FieldDefinition, FieldHandle, FieldInstantiation, FunctionAttribute, FunctionDefinition, load_code, load_signature_token, Metadata, ModuleHandle, MoveModule, SignatureToken, StructDefinition, StructDefInstantiation, StructVariantHandle, StructVariantInstantiation, VariantDefinition, VariantFieldHandle, VariantFieldInstantiation, Visibility } from "./compiledModule";
 
 export * from "./compiledModule";
 export * from "./serializedType";
 
-export interface MoveModule {
-    magic: number;
-    version: number;
-    selfModuleHandleIdx: number;
-    module_handles: Array<{ address: number; name: number }>;
-    struct_handles: Array<{
-        module: number;
-        name: number;
-        abilities: number;
-        type_parameters: { constraints: number; is_phantom: boolean }[];
-    }>;
-    function_handles: Array<{
-        module: number;
-        name: number;
-        parameters: number;
-        return_: number;
-        type_parameters: number[];
-        access_specifiers?: any;
-        attributes?: any;
-    }>;
-    function_inst: Array<{ handle: number; type_parameters: number }>;
-    signatures: Array<SignatureToken>;
-    constant_pool: Array<Constant>;
-    identifiers: Array<string>;
-    address_identifiers: Array<string>;
-    metadatas: Array<Metadata>;
-    function_defs: Array<FunctionDefinition>;
-    struct_defs: Array<StructDefinition>;
-    field_defs: Array<FieldHandle>;
-    field_insts: Array<FieldInstantiation>;
-    friend_decls: Array<ModuleHandle>;
-    variant_field_handles: Array<VariantFieldHandle>;
-    variant_field_inst: Array<VariantFieldInstantiation>;
-    struct_variant_handles: Array<StructVariantHandle>;
-    struct_variant_inst: Array<StructVariantInstantiation>;
-}
 
 export function disassembleMoveModule(bytecode: Uint8Array | Buffer): MoveModule {
     const des = new Deserializer(bytecode);
@@ -128,7 +92,7 @@ export function disassembleMoveModule(bytecode: Uint8Array | Buffer): MoveModule
 
     let function_inst: Array<{ handle: number; type_parameters: number; }> = [];
 
-    let signatures: Array<SignatureToken> = [];
+    let signatures: Array<Array<SignatureToken>> = [];
     let constant_pool: Array<Constant> = [];
     let identifiers: Array<string> = [];
     let address_identifiers: Array<string> = [];
@@ -245,7 +209,7 @@ export function disassembleMoveModule(bytecode: Uint8Array | Buffer): MoveModule
                     const tokens = Array.from({ length: signature_len }, () => {
                         return load_signature_token(deSignatures, version);
                     });
-                    signatures.push(...(tokens as SignatureToken[]));
+                    signatures.push(tokens);
                 }
             break;
             case TableKind.CONSTANT_POOL:

@@ -1,49 +1,5 @@
 import { disassembleMoveModule as dMoveModule, MoveModule, parseAbilities, parseSignatureToken } from './type';
 
-function disfieldType(field_type: string | { struct: number } | { struct: number; typeParams: Array<string | { struct: number } | { typeParam: number }>  } | { typeParam: number }, module: MoveModule): string {
-    let result = '';
-    if( typeof field_type === 'string') {
-        result = field_type;
-    }else if( typeof field_type === 'object' && 'struct' in field_type) {
-        if ('typeParams' in field_type) {
-            console.debug(module.identifiers.at(field_type.struct));
-
-            let struct_handle = module.struct_handles.at(field_type.struct)!;
-            let struct_module = module.module_handles.at(struct_handle.module)!;
-
-            result = `${module.identifiers.at(struct_module.name)}::${module.identifiers.at(struct_handle.name)}<${field_type.typeParams.map((tp) => {
-                if (typeof tp === 'string') {
-                    return tp;
-                } else if ('struct' in tp) {
-                    return disfieldType(tp, module);
-                } else if ('typeParam' in tp) {
-                    return disfieldType(tp, module);
-                }
-                return '';
-            }).join(', ')}>`;
-        } else {
-            let struct_handle = module.struct_handles.at(field_type.struct);
-            if (!struct_handle) {
-                throw new Error("Struct handle is out of bounds");
-            }
-            let struct_module = module.module_handles.at(struct_handle.module);
-            if (!struct_module) {
-                throw new Error("Struct module handle is out of bounds");
-            }
-            let struct_module_name = module.identifiers.at(struct_module.name);
-            if (!struct_module_name) {
-                throw new Error("Struct module name identifier is out of bounds");
-            }
-            let struct_name = module.identifiers.at(struct_handle.name);
-            if (!struct_name) {
-                throw new Error("Struct name identifier is out of bounds");
-            }
-            result = `${struct_module_name}::${struct_name}`;
-        }
-    }
-    return result;
-}
-
 export function disassemble(
     module: MoveModule
 ): string {
@@ -146,11 +102,11 @@ export function disassemble(
                        if (!field_name) {
                            throw new Error("Field name identifier is out of bounds");
                        }
-                       const field_type = disfieldType(parseSignatureToken(field.type), module);
+                       const field_type = parseSignatureToken(field.type, module);
                        return `  ${field_name}: ${field_type}`;
                    }).join(',\n')
                 }\n}`;
-            case 'DeclaredVariants': {
+            case 'DeclaredVariants': { 
                 const variants = struct_definition.field_information.variants.map((variant) => {
                     const variant_name = module.identifiers.at(variant.name);
                     if (!variant_name) {
@@ -165,7 +121,75 @@ export function disassemble(
         }
     }).join('\n');
 
-    const str = `// Move bytecode v${module.version}\n${header} {\n\n${imports}\n\n${structs}\n\n}`;
+    const function_defs = module.function_defs.map((function_definition) => {
+        const function_visibility = function_definition.visibility;
+
+        const function_handle = module.function_handles.at(function_definition.function);
+        if (!function_handle) {
+            throw new Error("Function handle identifier is out of bounds");
+        }
+        const function_module = module.module_handles.at(function_handle.module);
+        if (!function_module) {
+            throw new Error("Function module handle is out of bounds");
+        }
+        const function_name = module.identifiers.at(function_handle.name);
+        if (!function_name) {
+            throw new Error("Function name identifier is out of bounds");
+        }
+
+        const modifiers: string[] = [];
+        modifiers.push(function_definition.code === undefined ? 'native' : '');
+
+        if (function_definition.isEntry) {
+            modifiers.push('entry');
+        }
+        switch (function_visibility) {
+            case 'public':
+                modifiers.push('public');
+                break;
+            case 'friend':
+                modifiers.push('public(friend)');
+                break;
+            case 'private':
+                break;
+            default:
+                throw new Error("Unknown function visibility: " + function_visibility);
+        }
+
+        const type_parameters = function_handle.type_parameters.map((abilitySet, idx) => {
+            const abilities = parseAbilities(abilitySet);
+            return `T${idx}${abilities.length > 0 ? `: ${abilities.join('+ ')}` : ''}`;
+        });
+
+        const params = module.signatures.at(function_handle.parameters)!.map((param, idx) => {
+            const param_type = parseSignatureToken(param, module);
+            return `arg${idx}: ${param_type}`;
+        });
+
+        const ret_type = module.signatures.at(function_handle.return_)!.map((ret) => {
+            return parseSignatureToken(ret, module);
+        });
+
+        let retTypeStr = '';
+        if (ret_type.length === 0) {
+          retTypeStr = '';
+        } else if (ret_type.length === 1) {
+          retTypeStr = `: ${ret_type[0]}`;
+        } else {
+          retTypeStr = `: (${ret_type.join(', ')})`;
+        }
+
+        return (
+          `${modifiers.join(' ')}${modifiers.length > 0 ? ' ' : ''}fun ` +
+          `${function_name}` +
+          `${type_parameters.length > 0 ? `<${type_parameters.join(', ')}>` : ""}` +
+          ` ( ${params.join(", ")} )` +
+          `${retTypeStr}` +
+          ` {\n`
+        );
+    }).join('\n\n');
+
+    const str = `// Move bytecode v${module.version}\n${header} {\n\n${imports}\n\n${structs}\n\n${function_defs}\n\n}`;
 
     return str;
 }
