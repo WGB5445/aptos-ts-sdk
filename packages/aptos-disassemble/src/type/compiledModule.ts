@@ -329,7 +329,7 @@ export const read_next = (deSignatures: Deserializer, version: number) => {
         return token_value
 }
 
-export const load_signature_token = (deSignatures: Deserializer, version: number) => {
+export function load_signature_token (deSignatures: Deserializer, version: number) {
   let stack: Array<TypeBuilder | SignatureToken > = [];
   let token = read_next(deSignatures, version);
   if( token == null){
@@ -366,8 +366,8 @@ export const load_signature_token = (deSignatures: Deserializer, version: number
               stack.push(result);
           };
       }
-
   }
+  throw new Error("Unexpected end of stack");
 }
 
 export const apply = (self: TypeBuilder, tok: SignatureToken): SignatureToken | TypeBuilder => {
@@ -952,4 +952,60 @@ export function load_code(deserializer: Deserializer, version: number): Array<By
               throw new Error(`Unknown bytecode opcode: 0x${byte.toString(16)}`);
         }
     });
+}
+
+export const AbilityValues = {
+  Copy: 1,
+  Drop: 2,
+  Store: 4,
+  Key: 8,
+};
+
+export function parseAbilities(abilities: number): string[] {
+  const result: string[] = [];
+  if (abilities & AbilityValues.Copy) result.push("copy");
+  if (abilities & AbilityValues.Drop) result.push("drop");
+  if (abilities & AbilityValues.Store) result.push("store");
+  if (abilities & AbilityValues.Key) result.push("key");
+  return result;
+}
+
+export function parseSignatureToken(token: SignatureToken): string | { struct: number } | { struct: number; typeParams: Array<string | { struct: number } | { typeParam: number }>  } | { typeParam: number } {
+  switch (token.kind) {
+    case "Bool":
+    case "U8":
+    case "U16":
+    case "U32":
+    case "U64":
+    case "U128":
+    case "U256":
+    case "Address":
+    case "Signer":
+      return token.kind.toLowerCase();
+    case "Vector":
+      return `vector<${parseSignatureToken(token.type)}>`;
+    case "Reference":
+      return `&${parseSignatureToken(token.type)}`;
+    case "MutableReference":
+      return `&mut ${parseSignatureToken(token.type)}`;
+    case "Struct":
+      return { struct: token.handle };
+    case "StructInstantiation":
+      return {
+        struct: token.handle,
+        typeParams: token.typeParams.map(parseSignatureToken),
+      };
+    case "TypeParameter":
+      return { typeParam: token.index };
+    case "Function":
+      // return {
+      //   function: {
+      //     args: token.args.map(parseSignatureToken),
+      //     results: token.results.map(parseSignatureToken),
+      //     abilities: parseAbilities(token.abilities),
+      //   },
+      // };
+    default:
+      throw new Error(`Unknown SignatureToken kind: ${(token as any).kind}`);
+  }
 }

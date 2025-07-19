@@ -4,7 +4,44 @@ import { AccessSpecifier, CodeUnit, Constant, FieldDefinition, FieldHandle, Fiel
 export * from "./compiledModule";
 export * from "./serializedType";
 
-export function disassembleMoveModule(bytecode: Uint8Array | Buffer): Record<string, any> {
+export interface MoveModule {
+    magic: number;
+    version: number;
+    selfModuleHandleIdx: number;
+    module_handles: Array<{ address: number; name: number }>;
+    struct_handles: Array<{
+        module: number;
+        name: number;
+        abilities: number;
+        type_parameters: { constraints: number; is_phantom: boolean }[];
+    }>;
+    function_handles: Array<{
+        module: number;
+        name: number;
+        parameters: number;
+        return_: number;
+        type_parameters: number[];
+        access_specifiers?: any;
+        attributes?: any;
+    }>;
+    function_inst: Array<{ handle: number; type_parameters: number }>;
+    signatures: Array<SignatureToken>;
+    constant_pool: Array<Constant>;
+    identifiers: Array<string>;
+    address_identifiers: Array<string>;
+    metadatas: Array<Metadata>;
+    function_defs: Array<FunctionDefinition>;
+    struct_defs: Array<StructDefinition>;
+    field_defs: Array<FieldHandle>;
+    field_insts: Array<FieldInstantiation>;
+    friend_decls: Array<ModuleHandle>;
+    variant_field_handles: Array<VariantFieldHandle>;
+    variant_field_inst: Array<VariantFieldInstantiation>;
+    struct_variant_handles: Array<StructVariantHandle>;
+    struct_variant_inst: Array<StructVariantInstantiation>;
+}
+
+export function disassembleMoveModule(bytecode: Uint8Array | Buffer): MoveModule {
     const des = new Deserializer(bytecode);
 
     // get magic
@@ -77,7 +114,7 @@ export function disassembleMoveModule(bytecode: Uint8Array | Buffer): Record<str
       STRUCT_VARIANT_INST: 0x14,
     };
 
-    let module_handles: Array<{address: Number, name: Number}> = [];
+    let module_handles: Array<{address: number, name: number}> = [];
     let struct_handles: Array<{ module: number; name: number; abilities: number; type_parameters: { constraints: number; is_phantom: boolean; }[];}> = [];
     let function_handles: Array<{
         module: number;
@@ -303,7 +340,7 @@ export function disassembleMoveModule(bytecode: Uint8Array | Buffer): Record<str
     let struct_variant_handles: Array<StructVariantHandle> = [];
     let struct_variant_inst: Array<StructVariantInstantiation> = [];
 
-    tables.forEach((table, idx) => {
+    tables.forEach((table) => {
         switch (table.kind) {
             case TableKind.STRUCT_DEFS:
                 const deStructDefs = new Deserializer(tables_byte.slice(table.table_offset, table.table_offset + table.count));
@@ -439,7 +476,6 @@ export function disassembleMoveModule(bytecode: Uint8Array | Buffer): Record<str
                         extra_flags ^= 2;
                     }else {
                         let locals = deFunctionDefs.deserializeUleb128AsU32();
-                        console.log(`Function ${function_} has ${locals} locals`);
                         let codes = load_code(deFunctionDefs, version);
                         code_unit = {
                             locals,
