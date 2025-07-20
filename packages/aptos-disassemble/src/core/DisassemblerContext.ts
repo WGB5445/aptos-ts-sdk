@@ -4,9 +4,17 @@
  */
 import { MoveModule, SignatureToken } from "../types/MoveModule";
 import { parseSignatureToken, parseAbilities } from "../utils/SignatureUtils";
+import { DisassemblerOptions, DEFAULT_DISASSEMBLER_OPTIONS } from "../types/DisassemblerOptions";
 
 export class DisassemblerContext {
-  constructor(private readonly module: MoveModule) {}
+  public readonly options: DisassemblerOptions;
+
+  constructor(
+    private readonly module: MoveModule, 
+    options?: Partial<DisassemblerOptions>
+  ) {
+    this.options = { ...DEFAULT_DISASSEMBLER_OPTIONS, ...options };
+  }
 
   get version(): number {
     return this.module.version;

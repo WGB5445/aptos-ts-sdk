@@ -3,9 +3,15 @@
  */
 import { DisassemblerContext } from "../core/DisassemblerContext";
 import { InstructionDisassembler } from "./InstructionDisassembler";
+import { VMControlFlowGraph } from "../core/ControlFlowGraph";
+import { DisassemblerOptions } from "../types/DisassemblerOptions";
 
 export class ModuleDisassembler {
-  constructor(private readonly context: DisassemblerContext) {}
+  private readonly options: DisassemblerOptions;
+
+  constructor(private readonly context: DisassemblerContext) {
+    this.options = this.context.options;
+  }
 
   disassemble(): string {
     const { moduleNames, moduleAliases } = this.buildModuleAliases();
@@ -192,11 +198,36 @@ export class ModuleDisassembler {
 
           const instructionDisassembler = new InstructionDisassembler(this.context, params, locals);
 
+          // Create control flow graph if basic blocks should be printed
+          let cfg: VMControlFlowGraph | undefined;
+          let blockIdToNumber: Map<number, number> | undefined;
+          
+          if (this.options.printBasicBlocks) {
+            cfg = new VMControlFlowGraph(functionDefinition.code.code);
+            // Create mapping from block ID to block number for display
+            blockIdToNumber = new Map();
+            cfg.blocks().forEach((blockId, index) => {
+              blockIdToNumber!.set(blockId, index);
+            });
+          }
+
           functionDefinition.code.code.forEach((instruction, idx) => {
             const instructionStr = instructionDisassembler.disassemble(instruction);
-            if (idx === 0) {
+            
+            // Check if this instruction starts a new basic block
+            if (this.options.printBasicBlocks && cfg && blockIdToNumber) {
+              const blockId = cfg.blocks().find(blockId => cfg!.blockStart(blockId) === idx);
+              if (blockId !== undefined) {
+                const blockNumber = blockIdToNumber.get(blockId);
+                if (blockNumber !== undefined) {
+                  body.push(`B${blockNumber}:`);
+                }
+              }
+            } else if (idx === 0 && !this.options.printBasicBlocks) {
+              // Legacy behavior: only add B0: for the first instruction if not using CFG
               body.push(`B0:`);
             }
+
             body.push(
               `${"".padStart(4, " ")}${`${idx}`.padEnd(4, " ")}:${"".padEnd(6, " ")}${instructionStr}`
             );
