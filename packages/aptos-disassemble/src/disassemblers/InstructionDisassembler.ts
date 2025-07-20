@@ -301,16 +301,67 @@ export class InstructionDisassembler {
       functionString = `${moduleName}::${functionName}`;
     }
 
-    const typeArguments = functionHandle.type_parameters.map((tp) =>
-      this.context.parseAbilities(tp)
-    );
-    const typeParamsStr = typeArguments.length > 0 ? `<${typeArguments.join(", ")}>` : "";
+    // Get function signature
+    const paramSignature = this.context.getSignature(functionHandle.parameters);
+    const returnSignature = this.context.getSignature(functionHandle.return_);
+    
+    // Format parameters
+    const paramTypes = paramSignature.map(token => this.context.parseSignatureToken(token));
+    const paramStr = `(${paramTypes.join(", ")})`;
+    
+    // Format return type
+    let returnStr = "";
+    if (returnSignature.length > 0) {
+      const returnTypes = returnSignature.map(token => this.context.parseSignatureToken(token));
+      if (returnTypes.length === 1) {
+        returnStr = `: ${returnTypes[0]}`;
+      } else {
+        returnStr = `: (${returnTypes.join(", ")})`;
+      }
+    }
 
-    return `Call[${funcHandleIdx}](${functionString}${typeParamsStr})`;
+    return `Call ${functionString}${paramStr}${returnStr}`;
   }
 
-  private formatCallGeneric(_funcInstIdx: number): string {
-    return `CallGeneric`;
+  private formatCallGeneric(funcInstIdx: number): string {
+    const functionInst = this.context.getFunctionInstantiation(funcInstIdx);
+    const functionHandle = this.context.getFunctionHandle(functionInst.handle);
+    const functionName = this.context.getIdentifier(functionHandle.name);
+    const moduleHandle = this.context.getModuleHandle(functionHandle.module);
+
+    let functionString = "";
+    if (this.context.selfModuleHandleIdx === functionHandle.module) {
+      functionString = functionName;
+    } else {
+      const moduleName = this.context.getIdentifier(moduleHandle.name);
+      functionString = `${moduleName}::${functionName}`;
+    }
+
+    // Get generic type parameters
+    const typeParamSignature = this.context.getSignature(functionInst.type_parameters);
+    const typeParams = typeParamSignature.map(token => this.context.parseSignatureToken(token));
+    const typeParamsStr = typeParams.length > 0 ? `<${typeParams.join(", ")}>` : "";
+
+    // Get function signature
+    const paramSignature = this.context.getSignature(functionHandle.parameters);
+    const returnSignature = this.context.getSignature(functionHandle.return_);
+    
+    // Format parameters
+    const paramTypes = paramSignature.map(token => this.context.parseSignatureToken(token));
+    const paramStr = `(${paramTypes.join(", ")})`;
+    
+    // Format return type
+    let returnStr = "";
+    if (returnSignature.length > 0) {
+      const returnTypes = returnSignature.map(token => this.context.parseSignatureToken(token));
+      if (returnTypes.length === 1) {
+        returnStr = `: ${returnTypes[0]}`;
+      } else {
+        returnStr = `: (${returnTypes.join(", ")})`;
+      }
+    }
+
+    return `Call ${functionString}${typeParamsStr}${paramStr}${returnStr}`;
   }
 
   private formatCallClosure(sigIdx: number): string {
