@@ -1,5 +1,5 @@
 import { bcs, Deserializer } from "aptos-bcs";
-import { AccessSpecifier, CodeUnit, Constant, FieldDefinition, FieldHandle, FieldInstantiation, FunctionAttribute, FunctionDefinition, load_code, load_signature_token, Metadata, ModuleHandle, MoveModule, SignatureToken, StructDefinition, StructDefInstantiation, StructVariantHandle, StructVariantInstantiation, VariantDefinition, VariantFieldHandle, VariantFieldInstantiation, Visibility } from "./compiledModule";
+import {  AccessSpecifier, Bytecode, CodeUnit, Constant, FieldDefinition, FieldHandle, FieldInstantiation, FunctionAttribute, FunctionDefinition, load_code, load_signature_token, Metadata, ModuleHandle, MoveModule, parseSignatureToken, SignatureToken, StructDefinition, StructDefInstantiation, StructVariantHandle, StructVariantInstantiation, VariantDefinition, VariantFieldHandle, VariantFieldInstantiation, Visibility } from "./compiledModule";
 
 export * from "./compiledModule";
 export * from "./serializedType";
@@ -550,6 +550,7 @@ export function disassembleMoveModule(bytecode: Uint8Array | Buffer): MoveModule
         struct_handles,
         function_handles,
         function_inst,
+        struct_defs_inst,
         signatures,
         constant_pool,
         identifiers,
@@ -557,7 +558,7 @@ export function disassembleMoveModule(bytecode: Uint8Array | Buffer): MoveModule
         metadatas,
         function_defs,
         struct_defs,
-        field_defs,
+        field_handles: field_defs,
         field_insts,
         friend_decls,
         variant_field_handles,
@@ -565,4 +566,256 @@ export function disassembleMoveModule(bytecode: Uint8Array | Buffer): MoveModule
         struct_variant_handles,
         struct_variant_inst
     };
+}
+
+export function disassemble_instruction(
+    instruction: Bytecode,
+    params: string[],
+    locals: string[],
+    module: MoveModule
+): string {
+    switch (instruction.kind) {
+        case "LdConst":
+            const constant = module.constant_pool[instruction.constIdx];
+        return `LdConst[${instruction.constIdx}](${parseSignatureToken(constant.type,module)}: ${constant.data})`;
+        case "CopyLoc":
+            if ( instruction.localIdx < params.length ){
+                return `CopyLoc[${instruction.localIdx}](arg${instruction.localIdx}: ${params[instruction.localIdx]})`;
+            }else if( instruction.localIdx < params.length + locals.length ){
+                return `CopyLoc[${instruction.localIdx}](loc${instruction.localIdx - params.length}: ${locals[instruction.localIdx - params.length]})`;
+            }else{
+                throw new Error(`Invalid local index: ${instruction.localIdx}`);
+            }
+        case "MoveLoc":
+            if ( instruction.localIdx < params.length ){
+                return `MoveLoc[${instruction.localIdx}](arg${instruction.localIdx}: ${params[instruction.localIdx]})`;
+            }else if( instruction.localIdx < params.length + locals.length ){
+                return `MoveLoc[${instruction.localIdx}](loc${instruction.localIdx - params.length}: ${locals[instruction.localIdx - params.length]})`;
+            }else{
+                throw new Error(`Invalid local index: ${instruction.localIdx}`);
+            }
+        case "StLoc":
+            if ( instruction.localIdx < params.length ){
+                return `StLoc[${instruction.localIdx}](arg${instruction.localIdx}: ${params[instruction.localIdx]})`;
+            }else if( instruction.localIdx < params.length + locals.length ){
+                return `StLoc[${instruction.localIdx}](loc${instruction.localIdx - params.length}: ${locals[instruction.localIdx - params.length]})`;
+            }
+            else{
+                throw new Error(`Invalid local index: ${instruction.localIdx}`);
+            }
+        case "MutBorrowLoc":
+            if ( instruction.localIdx < params.length ){
+                return `MutBorrowLoc[${instruction.localIdx}](arg${instruction.localIdx}: ${params[instruction.localIdx]})`;
+            }else if( instruction.localIdx < params.length + locals.length ){
+                return `MutBorrowLoc[${instruction.localIdx}](loc${instruction.localIdx - params.length}: ${locals[instruction.localIdx - params.length]})`;
+            }else{
+                throw new Error(`Invalid local index: ${instruction.localIdx}`);
+            }
+        case "ImmBorrowLoc":
+            if ( instruction.localIdx < params.length ){
+                return `ImmBorrowLoc[${instruction.localIdx}](arg${instruction.localIdx}: ${params[instruction.localIdx]})`;
+            }else if( instruction.localIdx < params.length + locals.length ){
+                return `ImmBorrowLoc[${instruction.localIdx}](loc${instruction.localIdx - params.length}: ${locals[instruction.localIdx - params.length]})`;
+            }else{
+                throw new Error(`Invalid local index: ${instruction.localIdx}`);
+            }
+        case "MutBorrowField":
+            const fieldHandle = module.field_handles[instruction.fieldHandleIdx];
+            const structDef = module.struct_defs[fieldHandle.owner];
+            const structName = module.identifiers[module.struct_handles[structDef.struct_handle].name];
+            let fields: Array<FieldDefinition> = [];
+            switch (structDef.field_information.kind) {
+                case "Native":
+                break;
+                case "Declared":
+                    fields = structDef.field_information.fields;
+                break;
+                default:
+                    break;    
+            };
+            const field = fields[fieldHandle.field];
+            if (!field) {
+                throw new Error(`Field not found: ${fieldHandle.field}`);
+            }
+            const fieldTypeIndex = field.type;
+            let ty = parseSignatureToken(fieldTypeIndex, module);
+            return `MutBorrowField[${instruction.fieldHandleIdx}](${structName}.${module.identifiers[field.name]}: ${ty})`;
+        case "MutBorrowFieldGeneric":
+            const fieldInst = module.field_insts[instruction.fieldInstIdx];
+            const fieldHandleGeneric = module.field_handles[fieldInst.handle];
+            const structDefGeneric = module.struct_defs[fieldHandleGeneric.owner];
+            const structNameGeneric = module.identifiers[module.struct_handles[structDefGeneric.struct_handle].name];
+            let fieldsGeneric: Array<FieldDefinition> = [];
+            switch (structDefGeneric.field_information.kind) {
+                case "Native":
+                break;
+                case "Declared":
+                    fieldsGeneric = structDefGeneric.field_information.fields;
+                break;
+                default:
+                    break;    
+            };
+            const fieldGeneric = fieldsGeneric[fieldHandleGeneric.field];
+            if (!fieldGeneric) {
+                throw new Error(`Field not found: ${fieldHandleGeneric.field}`);
+            }
+            const fieldTypeIndexGeneric = fieldGeneric.type;
+            let tyGeneric = parseSignatureToken(fieldTypeIndexGeneric, module);
+            return `MutBorrowFieldGeneric[${instruction.fieldInstIdx}](${structNameGeneric}.${module.identifiers[fieldGeneric.name]}: ${tyGeneric})`;
+        case "ImmBorrowField":
+            const fieldHandleImm = module.field_handles[instruction.fieldHandleIdx];
+            const structDefImm = module.struct_defs[fieldHandleImm.owner];
+            const structNameImm = module.identifiers[module.struct_handles[structDefImm.struct_handle].name];
+            let fieldsImm: Array<FieldDefinition> = [];
+            switch (structDefImm.field_information.kind) {
+                case "Native":
+                break;
+                case "Declared":
+                    fieldsImm = structDefImm.field_information.fields;
+                break;
+                default:
+                    break;    
+            };
+            const fieldImm = fieldsImm[fieldHandleImm.field];
+            if (!fieldImm) {
+                throw new Error(`Field not found: ${fieldHandleImm.field}`);
+            }
+            const fieldTypeIndexImm = fieldImm.type;
+            let tyImm = parseSignatureToken(fieldTypeIndexImm, module);
+            return `ImmBorrowField[${instruction.fieldHandleIdx}](${structNameImm}.${module.identifiers[fieldImm.name]}: ${tyImm})`;
+        case "ImmBorrowFieldGeneric":
+            const fieldInstImm = module.field_insts[instruction.fieldInstIdx];
+            const fieldHandleImmGeneric = module.field_handles[fieldInstImm.handle];
+            const structDefImmGeneric = module.struct_defs[fieldHandleImmGeneric.owner];
+            const structNameImmGeneric = module.identifiers[module.struct_handles[structDefImmGeneric.struct_handle].name];
+            let fieldsImmGeneric: Array<FieldDefinition> = [];
+            switch (structDefImmGeneric.field_information.kind) {
+                case "Native":
+                break;
+                case "Declared":
+                    fieldsImmGeneric = structDefImmGeneric.field_information.fields;
+                break;
+                default:
+                    break;    
+            };
+            const fieldImmGeneric = fieldsImmGeneric[fieldHandleImmGeneric.field];
+            if (!fieldImmGeneric) {
+                throw new Error(`Field not found: ${fieldHandleImmGeneric.field}`);
+            }
+            const fieldTypeIndexImmGeneric = fieldImmGeneric.type;
+            let tyImmGeneric = parseSignatureToken(fieldTypeIndexImmGeneric, module);
+            return `ImmBorrowFieldGeneric[${instruction.fieldInstIdx}](${structNameImmGeneric}.${module.identifiers[fieldImmGeneric.name]}: ${tyImmGeneric})`;
+        case "MutBorrowVariantField":
+            // const variantFieldHandle = module.variant_field_handles[instruction.variantFieldHandleIdx];
+            // const structVariantDef = module.struct_defs[variantFieldHandle.struct_index];
+            // const structVariantName = module.identifiers[module.struct_handles[structVariantDef.struct_handle].name];
+            // let variantFields: Array<FieldDefinition> = [];
+            // switch (structVariantDef.field_information.kind) {
+            //     case "Native":
+            //     break;
+            //     case "DeclaredVariants":
+            //         const variant = structVariantDef.field_information.variants[instruction.variantIndex];
+            //         if (!variant) {
+            //             throw new Error(`Variant not found: ${instruction.variantIndex}`);
+            //         }
+            //         variantFields = variant.fields;
+            //     break;
+            //     default:
+            //         break;    
+            // };
+            // const variantField = variantFields[variantFieldHandle.field];
+            // if (!variantField) {
+            //     throw new Error(`Variant field not found: ${variantFieldHandle.field}`);
+            // }
+            // const variantFieldTypeIndex = variantField.type;
+            // let tyVariant = parseSignatureToken(variantFieldTypeIndex, module);
+            // return `MutBorrowVariantField[${instruction.variantFieldHandleIdx}](${structVariantName}.${module.identifiers[variantField.name]}: ${tyVariant})`;
+            throw new Error("MutBorrowVariantField is not implemented yet");
+        case "MutBorrowVariantFieldGeneric":
+            throw new Error("MutBorrowVariantFieldGeneric is not implemented yet");
+        case "ImmBorrowVariantField":
+            throw new Error("ImmBorrowVariantField is not implemented yet");
+        case "ImmBorrowVariantFieldGeneric":
+            throw new Error("ImmBorrowVariantFieldGeneric is not implemented yet");
+        case "Pack":
+            {
+                const structDef = module.struct_defs[instruction.structDefIdx];
+                const structName = module.identifiers[module.struct_handles[structDef.struct_handle].name];
+                return `Pack[${instruction.structDefIdx}](${structName})`;
+            }    
+        case "PackGeneric":
+            {
+                const structInst = module.struct_defs_inst[instruction.structInstIdx];
+                const structName = module.identifiers[module.struct_handles[module.struct_defs[structInst.def].struct_handle].name];
+                const structTypeParams = module.signatures.at(structInst.typeParameters)!.map((tp) => {
+                    return parseSignatureToken(tp,module);
+                });
+                return `PackGeneric[${instruction.structInstIdx}](${structName}${structTypeParams?.length > 0 ? `<${structTypeParams.join(", ")}>` : ""})`;
+            }
+        case "Unpack":
+            {
+                const structDef = module.struct_defs[instruction.structDefIdx];
+                const structName = module.identifiers[module.struct_handles[structDef.struct_handle].name];
+                return `Unpack[${instruction.structDefIdx}](${structName})`;
+            }
+        case "UnpackGeneric":
+            {
+                const structInst = module.struct_defs_inst[instruction.structInstIdx];
+                const structName = module.identifiers[module.struct_handles[module.struct_defs[structInst.def].struct_handle].name];
+                const structTypeParams = module.signatures.at(structInst.typeParameters)!.map((tp) => {
+                    return parseSignatureToken(tp,module);
+                });
+                return `UnpackGeneric[${instruction.structInstIdx}](${structName}${structTypeParams?.length > 0 ? `<${structTypeParams.join(", ")}>` : ""})`;
+            }
+        case "PackVariant":
+            {
+                const structVariantHandle = module.struct_variant_handles[instruction.structVariantHandleIdx];
+                const structDef = module.struct_defs[structVariantHandle.struct_index];
+                const structName = module.identifiers[module.struct_handles[structDef.struct_handle].name];
+                let variantName = "";
+                switch (structDef.field_information.kind) {
+                    case "DeclaredVariants":
+                        const variant = structDef.field_information.variants[structVariantHandle.variant];
+                        if (!variant) {
+                            throw new Error(`Variant not found: ${structVariantHandle.variant}`);
+                        }
+                        variantName = module.identifiers[variant.name];
+                    break;
+    
+                    default:
+                        throw new Error(`PackVariant is not supported for field information kind: ${structDef.field_information.kind}`);
+                }
+                return `PackVariant[${instruction.structVariantHandleIdx}](${structName}/${variantName})`;
+            }
+        case "PackVariantGeneric":
+            {
+                const struct_variant_inst =  module.struct_variant_inst[instruction.structVariantInstIdx];
+                const type_params = module.signatures[struct_variant_inst.type_parameters];
+                const struct_variant_handle = module.struct_variant_handles[struct_variant_inst.handle];
+                const structDef = module.struct_defs[struct_variant_handle.struct_index]
+                const struct_handle  = module.struct_handles[structDef.struct_handle];
+                const struct_name = module.identifiers[struct_handle.name];
+                const structTypeParams = type_params!.map((tp) => {
+                    return parseSignatureToken(tp,module);
+                });
+                let variantName = "";
+                switch (structDef.field_information.kind) {
+                    case "DeclaredVariants":
+                        const variant = structDef.field_information.variants[struct_variant_handle.variant];
+                        if (!variant) {
+                            throw new Error(`Variant not found: ${struct_variant_handle.variant}`);
+                        }
+                        variantName = module.identifiers[variant.name];
+                    break;
+    
+                    default:
+                        throw new Error(`PackVariant is not supported for field information kind: ${structDef.field_information.kind}`);
+                }
+                return `PackVariantGeneric[${instruction.structVariantInstIdx}](${struct_name}/${variantName}${structTypeParams?.length > 0 ? `<${structTypeParams.join(", ")}>` : ""})`;
+            }
+
+        default:
+            throw new Error(`Unknown instruction kind: ${instruction.kind}`);
+    }
+
 }

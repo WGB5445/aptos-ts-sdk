@@ -24,21 +24,26 @@ export interface MoveModule {
         access_specifiers?: any;
         attributes?: any;
     }>;
+    field_handles: Array<FieldHandle>;
+    friend_decls: Array<ModuleHandle>;
+    struct_defs_inst: Array<StructDefInstantiation>;
+
     function_inst: Array<{ handle: number; type_parameters: number }>;
+    field_insts: Array<FieldInstantiation>;
     signatures: Array<Array<SignatureToken>>;
-    constant_pool: Array<Constant>;
     identifiers: Array<string>;
     address_identifiers: Array<string>;
+    constant_pool: Array<Constant>;
     metadatas: Array<Metadata>;
-    function_defs: Array<FunctionDefinition>;
     struct_defs: Array<StructDefinition>;
-    field_defs: Array<FieldHandle>;
-    field_insts: Array<FieldInstantiation>;
-    friend_decls: Array<ModuleHandle>;
-    variant_field_handles: Array<VariantFieldHandle>;
-    variant_field_inst: Array<VariantFieldInstantiation>;
+    function_defs: Array<FunctionDefinition>;
     struct_variant_handles: Array<StructVariantHandle>;
     struct_variant_inst: Array<StructVariantInstantiation>;
+    variant_field_handles: Array<VariantFieldHandle>;
+    variant_field_inst: Array<VariantFieldInstantiation>;
+
+
+
 }
 
 export interface ModuleHandle {
@@ -172,11 +177,6 @@ export type AddressIdentifierIndex = number;
 export type ConstantPoolIndex = number;
 export type TypeParameterIndex = number;
 export type VariantIndex = number;
-
-
-
-
-
 
 
 export interface FieldHandle {

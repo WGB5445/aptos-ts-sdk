@@ -1,4 +1,4 @@
-import { disassembleMoveModule as dMoveModule, MoveModule, parseAbilities, parseSignatureToken } from './type';
+import { disassemble_instruction, disassembleMoveModule as dMoveModule, MoveModule, parseAbilities, parseSignatureToken } from './type';
 
 export function disassemble(
     module: MoveModule
@@ -161,9 +161,10 @@ export function disassemble(
             return `T${idx}${abilities.length > 0 ? `: ${abilities.join('+ ')}` : ''}`;
         });
 
-        const params = module.signatures.at(function_handle.parameters)!.map((param, idx) => {
+        const params = module.signatures.at(function_handle.parameters)!.map((param) => {
             const param_type = parseSignatureToken(param, module);
-            return `arg${idx}: ${param_type}`;
+            // return `arg${idx}: ${param_type}`;
+            return param_type
         });
 
         const ret_type = module.signatures.at(function_handle.return_)!.map((ret) => {
@@ -179,13 +180,38 @@ export function disassemble(
           retTypeStr = `: (${ret_type.join(', ')})`;
         }
 
+        let body: Array<String> = [];
+        if (function_definition.code == undefined) {
+            body = [];
+        } else {
+            let signatures = module.signatures.at(function_definition.code.locals);
+            if (!signatures) {
+                throw new Error("Function code locals signature is out of bounds");
+            }
+            const maxIdx = signatures.length + params.length - 1;
+            const width = String(maxIdx).length;
+            const locals:string[] = [];
+            signatures.map((local, idx) => {
+                const local_type = parseSignatureToken(local, module);
+                body.push(`L${String(idx + params.length).padEnd(width, ' ')} loc${idx}: ${local_type}`);
+                locals.push(local_type);
+            });
+
+            function_definition.code.code.map((instruction) => {
+                const instruction_str = disassemble_instruction(instruction, params, locals, module);
+                body.push(instruction_str);
+            });
+        }
+
         return (
           `${modifiers.join(' ')}${modifiers.length > 0 ? ' ' : ''}fun ` +
           `${function_name}` +
           `${type_parameters.length > 0 ? `<${type_parameters.join(', ')}>` : ""}` +
-          ` ( ${params.join(", ")} )` +
+          ` ( ${params.map((param, idx) => `arg${idx}: ${param}`).join(", ")} )` +
           `${retTypeStr}` +
-          ` {\n`
+          ` {\n\n` +
+          `${body.join("\n")}\n` +
+          `}`
         );
     }).join('\n\n');
 
