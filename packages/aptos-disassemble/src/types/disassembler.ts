@@ -9,19 +9,23 @@ import {
   getVariantInfo,
 } from "../instruction-helpers";
 import {
-  parseSignatureToken,
-  parseAbilities,
-  Bytecode,
-  Constant,
-  Metadata,
-  MoveModule,
+  AccessSpecifier,
+  FunctionAttribute,
+  load_signature_token,
+  load_code,
   SignatureToken,
+  Bytecode,
   CodeUnit,
+  Constant,
   FieldDefinition,
   FieldHandle,
   FieldInstantiation,
   FunctionDefinition,
+  Metadata,
   ModuleHandle,
+  MoveModule,
+  parseAbilities,
+  parseSignatureToken,
   StructDefinition,
   StructDefInstantiation,
   StructVariantHandle,
@@ -30,8 +34,7 @@ import {
   VariantFieldHandle,
   VariantFieldInstantiation,
   Visibility,
-} from "../new-index";
-import { AccessSpecifier, FunctionAttribute, load_signature_token, load_code } from "./MoveModule";
+} from "./MoveModule";
 
 // Import functions that need to be defined
 // These should be moved from type/compiledModule.ts
