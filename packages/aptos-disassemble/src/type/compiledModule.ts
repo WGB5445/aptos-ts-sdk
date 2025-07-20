@@ -497,7 +497,17 @@ export type StructFieldInformation =
   | { kind: "Declared", fields: FieldDefinition[] }
   | { kind: "DeclaredVariants", variants: VariantDefinition[] };
 
+export function isDeclaredVariants(info: StructFieldInformation): info is { kind: "DeclaredVariants", variants: VariantDefinition[] } {
+  return info.kind === "DeclaredVariants";
+}
 
+export function isDeclared(info: StructFieldInformation): info is { kind: "Declared", fields: FieldDefinition[] } {
+  return info.kind === "Declared";
+}
+
+export function isNative(info: StructFieldInformation): info is { kind: "Native" } {
+  return info.kind === "Native";
+}
 
 export interface FieldDefinition {
   name: IdentifierIndex;

@@ -647,7 +647,6 @@ export function disassemble_instruction(
             );
         }
         
-        // Variant field operations - not implemented yet
         case "MutBorrowVariantField":
             throw new Error("MutBorrowVariantField is not implemented yet");
         case "MutBorrowVariantFieldGeneric":
@@ -847,30 +846,22 @@ export function disassemble_instruction(
             return `LdU32(${instruction.value})`;
         case "LdU256":
             return `LdU256(${instruction.value})`;
-        case "VecPack": {
+        case "VecPack": 
             return `VecPack(${instruction.elemTyIdx}, ${instruction.numElements})`;
-        }
-        case "VecLen": {
+        case "VecLen": 
             return `VecLen(${instruction.elemTyIdx})`;
-        }
-        case "VecImmBorrow": {
+        case "VecImmBorrow": 
             return `VecImmBorrow(${instruction.elemTyIdx})`;
-        }
-        case "VecMutBorrow": {
+        case "VecMutBorrow": 
             return `VecMutBorrow(${instruction.elemTyIdx})`;
-        }
-        case "VecPushBack": {
+        case "VecPushBack": 
             return `VecPushBack(${instruction.elemTyIdx})`;
-        }
-        case "VecPopBack": {
+        case "VecPopBack": 
             return `VecPopBack(${instruction.elemTyIdx})`;
-        }
-        case "VecUnpack": {
+        case "VecUnpack": 
             return `VecUnpack(${instruction.elemTyIdx}, ${instruction.numElements})`;
-        }
-        case "VecSwap": {
+        case "VecSwap": 
             return `VecSwap(${instruction.elemTyIdx})`;
-        }
         case "BrTrue":
             return `BrTrue(${instruction.codeOffset})`;
         case "BrFalse":
