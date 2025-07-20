@@ -156,10 +156,11 @@ export function disassemble(
                 throw new Error("Unknown function visibility: " + function_visibility);
         }
 
-        const type_parameters = function_handle.type_parameters.map((abilitySet, idx) => {
-            const abilities = parseAbilities(abilitySet);
-            return `T${idx}${abilities.length > 0 ? `: ${abilities.join('+ ')}` : ''}`;
-        });
+        // const type_parameters = function_handle.type_parameters.map((abilitySet, idx) => {
+        //     const abilities = parseAbilities(abilitySet);
+        //     return `T${idx}${abilities.length > 0 ? `: ${abilities.join('+ ')}` : ''}`;
+        // });
+        const type_parameters: string[] = [];
 
         const params = module.signatures.at(function_handle.parameters)!.map((param) => {
             const param_type = parseSignatureToken(param, module);
@@ -197,9 +198,12 @@ export function disassemble(
                 locals.push(local_type);
             });
 
-            function_definition.code.code.map((instruction) => {
+            function_definition.code.code.map((instruction, idx) => {
                 const instruction_str = disassemble_instruction(instruction, params, locals, module);
-                body.push(instruction_str);
+                if (idx == 0){
+                    body.push(`B0:`)
+                }
+                body.push(`${"".padStart(4, " ")}${`${idx}`.padEnd(4, " ")}:${"".padEnd(6, " ")}${instruction_str}`);
             });
         }
 
