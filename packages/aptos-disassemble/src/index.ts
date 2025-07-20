@@ -156,11 +156,10 @@ export function disassemble(
                 throw new Error("Unknown function visibility: " + function_visibility);
         }
 
-        // const type_parameters = function_handle.type_parameters.map((abilitySet, idx) => {
-        //     const abilities = parseAbilities(abilitySet);
-        //     return `T${idx}${abilities.length > 0 ? `: ${abilities.join('+ ')}` : ''}`;
-        // });
-        const type_parameters: string[] = [];
+        const type_parameters = function_handle.type_parameters.map((abilitySet, idx) => {
+            const abilities = parseAbilities(abilitySet);
+            return `T${idx}${abilities.length > 0 ? `: ${abilities.join('+ ')}` : ''}`;
+        });
 
         const params = module.signatures.at(function_handle.parameters)!.map((param) => {
             const param_type = parseSignatureToken(param, module);
