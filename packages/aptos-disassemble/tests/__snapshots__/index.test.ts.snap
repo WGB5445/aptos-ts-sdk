@@ -3593,7 +3593,7 @@ struct UpdateEpochIntervalEvent has drop, store {
   new_epoch_interval: u64
 }
 
- public(friend) fun initialize ( arg0: &signer, arg1: u64 ) {
+public(friend) fun initialize ( arg0: &signer, arg1: u64 ) {
 
 B0:
     0   :      CopyLoc[0](arg0: &signer)
@@ -3625,7 +3625,7 @@ B0:
     26  :      Abort
 }
 
- fun block_prologue ( arg0: signer, arg1: address, arg2: u64, arg3: u64, arg4: address, arg5: vector<u64>, arg6: vector<u8>, arg7: u64 ) {
+fun block_prologue ( arg0: signer, arg1: address, arg2: u64, arg3: u64, arg4: address, arg5: vector<u64>, arg6: vector<u8>, arg7: u64 ) {
 
 L8 loc0: u64
 B0:
@@ -3655,7 +3655,7 @@ B0:
     23  :      Ret
 }
 
- fun block_prologue_common ( arg0: &signer, arg1: address, arg2: u64, arg3: u64, arg4: address, arg5: vector<u64>, arg6: vector<u8>, arg7: u64 ): u64 {
+fun block_prologue_common ( arg0: &signer, arg1: address, arg2: u64, arg3: u64, arg4: address, arg5: vector<u64>, arg6: vector<u8>, arg7: u64 ): u64 {
 
 L8  loc0: bool
 L9  loc1: option::Option<u64>
@@ -3729,7 +3729,7 @@ B0:
     64  :      Branch(8)
 }
 
- fun block_prologue_ext ( arg0: signer, arg1: address, arg2: u64, arg3: u64, arg4: address, arg5: vector<u64>, arg6: vector<u8>, arg7: u64, arg8: option::Option<vector<u8>> ) {
+fun block_prologue_ext ( arg0: signer, arg1: address, arg2: u64, arg3: u64, arg4: address, arg5: vector<u64>, arg6: vector<u8>, arg7: u64, arg8: option::Option<vector<u8>> ) {
 
 L9 loc0: u64
 B0:
@@ -3759,7 +3759,7 @@ B0:
     23  :      Ret
 }
 
- fun emit_genesis_block_event ( arg0: signer ) {
+fun emit_genesis_block_event ( arg0: signer ) {
 
 L1 loc0: &mut BlockResource
 B0:
@@ -3782,7 +3782,7 @@ B0:
     16  :      Ret
 }
 
- fun emit_new_block_event ( arg0: &signer, arg1: &mut event::EventHandle<NewBlockEvent>, arg2: NewBlockEvent ) {
+fun emit_new_block_event ( arg0: &signer, arg1: &mut event::EventHandle<NewBlockEvent>, arg2: NewBlockEvent ) {
 
 L3 loc0: &mut CommitHistory
 L4 loc1: u32
@@ -3852,7 +3852,7 @@ B0:
     62  :      Abort
 }
 
- public fun emit_writeset_block_event ( arg0: &signer, arg1: address ) {
+public fun emit_writeset_block_event ( arg0: &signer, arg1: address ) {
 
 L2 loc0: &mut BlockResource
 B0:
@@ -3885,7 +3885,7 @@ B0:
     26  :      Ret
 }
 
- public fun get_current_block_height (  ): u64 {
+public fun get_current_block_height (  ): u64 {
 
 B0:
     0   :      LdConst[1](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1)
@@ -3895,7 +3895,7 @@ B0:
     4   :      Ret
 }
 
- public fun get_epoch_interval_secs (  ): u64 {
+public fun get_epoch_interval_secs (  ): u64 {
 
 B0:
     0   :      LdConst[1](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1)
@@ -3907,7 +3907,7 @@ B0:
     6   :      Ret
 }
 
- public fun initialize_commit_history ( arg0: &signer, arg1: u32 ) {
+public fun initialize_commit_history ( arg0: &signer, arg1: u32 ) {
 
 B0:
     0   :      CopyLoc[1](arg1: u32)
@@ -3928,7 +3928,7 @@ B0:
     15  :      Abort
 }
 
- public fun update_epoch_interval_microsecs ( arg0: &signer, arg1: u64 ) {
+public fun update_epoch_interval_microsecs ( arg0: &signer, arg1: u64 ) {
 
 L2 loc0: &mut BlockResource
 L3 loc1: u64
