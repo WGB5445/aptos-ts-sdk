@@ -40,7 +40,10 @@ export function disassemble(module: MoveModule, options?: Partial<DisassemblerOp
 /**
  * Convenience function to disassemble bytecode directly to string
  */
-export function disassemble_to_string(bytecode: Uint8Array | Buffer, options?: Partial<DisassemblerOptions>): string {
+export function disassemble_to_string(
+  bytecode: Uint8Array | Buffer,
+  options?: Partial<DisassemblerOptions>
+): string {
   const module = BytecodeLoader.loadFromBytecode(bytecode);
   return disassemble(module, options);
 }
@@ -57,7 +60,10 @@ export class MoveDisassembler {
     this.moduleDisassembler = new ModuleDisassembler(this.context);
   }
 
-  static fromBytecode(bytecode: Uint8Array | Buffer, options?: Partial<DisassemblerOptions>): MoveDisassembler {
+  static fromBytecode(
+    bytecode: Uint8Array | Buffer,
+    options?: Partial<DisassemblerOptions>
+  ): MoveDisassembler {
     const module = BytecodeLoader.loadFromBytecode(bytecode);
     return new MoveDisassembler(module, options);
   }
@@ -94,12 +100,12 @@ export class MoveDisassembler {
     if (!module.function_defs || functionIndex >= module.function_defs.length) {
       throw new Error(`Function index ${functionIndex} out of bounds`);
     }
-    
+
     const functionDef = module.function_defs[functionIndex];
     if (!functionDef.code) {
       throw new Error(`Function at index ${functionIndex} has no code`);
     }
-    
+
     return new VMControlFlowGraph(functionDef.code.code);
   }
 }

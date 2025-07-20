@@ -9,20 +9,18 @@ describe("Basic Block Integration", () => {
       magic: 0xa11ceb0b,
       version: 7,
       selfModuleHandleIdx: 0,
-      module_handles: [
-        { address: 0, name: 0 }
-      ],
+      module_handles: [{ address: 0, name: 0 }],
       struct_handles: [],
       function_handles: [
-        { 
-          module: 0, 
-          name: 0, 
-          parameters: 0, 
-          return_: 1, 
+        {
+          module: 0,
+          name: 0,
+          parameters: 0,
+          return_: 1,
           type_parameters: [],
           access_specifiers: undefined,
-          attributes: undefined
-        }
+          attributes: undefined,
+        },
       ],
       field_handles: [],
       friend_decls: [],
@@ -44,15 +42,15 @@ describe("Basic Block Integration", () => {
           code: {
             locals: 0, // Index to empty signature
             code: [
-              { kind: "LdTrue" as const },           // 0: Block 0
+              { kind: "LdTrue" as const }, // 0: Block 0
               { kind: "BrFalse" as const, codeOffset: 4 }, // 1: Branch to 4
-              { kind: "LdU8" as const, value: 1 },   // 2: Block 1
+              { kind: "LdU8" as const, value: 1 }, // 2: Block 1
               { kind: "Branch" as const, codeOffset: 5 }, // 3: Branch to 5
-              { kind: "LdU8" as const, value: 2 },   // 4: Block 2
-              { kind: "Ret" as const }              // 5: Block 3
-            ]
-          }
-        }
+              { kind: "LdU8" as const, value: 2 }, // 4: Block 2
+              { kind: "Ret" as const }, // 5: Block 3
+            ],
+          },
+        },
       ],
       struct_variant_handles: [],
       struct_variant_inst: [],
@@ -63,16 +61,16 @@ describe("Basic Block Integration", () => {
     // Test with basic blocks enabled (default)
     const disassemblerWithBlocks = new MoveDisassembler(mockModule, { printBasicBlocks: true });
     const outputWithBlocks = disassemblerWithBlocks.disassemble();
-    
+
     // Should contain multiple block markers
     expect(outputWithBlocks).toMatch(/B0:/);
     expect(outputWithBlocks).toMatch(/B1:/);
     expect(outputWithBlocks).toMatch(/B2:/);
-    
+
     // Test with basic blocks disabled
     const disassemblerWithoutBlocks = new MoveDisassembler(mockModule, { printBasicBlocks: false });
     const outputWithoutBlocks = disassemblerWithoutBlocks.disassemble();
-    
+
     // Should only contain B0: (legacy behavior)
     expect(outputWithoutBlocks).toMatch(/B0:/);
     expect(outputWithoutBlocks).not.toMatch(/B1:/);
@@ -84,20 +82,18 @@ describe("Basic Block Integration", () => {
       magic: 0xa11ceb0b,
       version: 7,
       selfModuleHandleIdx: 0,
-      module_handles: [
-        { address: 0, name: 0 }
-      ],
+      module_handles: [{ address: 0, name: 0 }],
       struct_handles: [],
       function_handles: [
-        { 
-          module: 0, 
-          name: 0, 
-          parameters: 0, 
-          return_: 1, 
+        {
+          module: 0,
+          name: 0,
+          parameters: 0,
+          return_: 1,
           type_parameters: [],
           access_specifiers: undefined,
-          attributes: undefined
-        }
+          attributes: undefined,
+        },
       ],
       field_handles: [],
       friend_decls: [],
@@ -116,8 +112,8 @@ describe("Basic Block Integration", () => {
           visibility: "private" as const,
           isEntry: false,
           acquiresGlobalResources: [],
-          code: undefined // Native function
-        }
+          code: undefined, // Native function
+        },
       ],
       struct_variant_handles: [],
       struct_variant_inst: [],
@@ -127,7 +123,7 @@ describe("Basic Block Integration", () => {
 
     const disassembler = new MoveDisassembler(mockModule);
     const output = disassembler.disassemble();
-    
+
     // Should not crash and should contain the native function
     expect(output).toContain("native");
   });

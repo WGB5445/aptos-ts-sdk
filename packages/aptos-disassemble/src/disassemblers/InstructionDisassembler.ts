@@ -304,15 +304,15 @@ export class InstructionDisassembler {
     // Get function signature
     const paramSignature = this.context.getSignature(functionHandle.parameters);
     const returnSignature = this.context.getSignature(functionHandle.return_);
-    
+
     // Format parameters
-    const paramTypes = paramSignature.map(token => this.context.parseSignatureToken(token));
+    const paramTypes = paramSignature.map((token) => this.context.parseSignatureToken(token));
     const paramStr = `(${paramTypes.join(", ")})`;
-    
+
     // Format return type
     let returnStr = "";
     if (returnSignature.length > 0) {
-      const returnTypes = returnSignature.map(token => this.context.parseSignatureToken(token));
+      const returnTypes = returnSignature.map((token) => this.context.parseSignatureToken(token));
       if (returnTypes.length === 1) {
         returnStr = `: ${returnTypes[0]}`;
       } else {
@@ -339,21 +339,21 @@ export class InstructionDisassembler {
 
     // Get generic type parameters
     const typeParamSignature = this.context.getSignature(functionInst.type_parameters);
-    const typeParams = typeParamSignature.map(token => this.context.parseSignatureToken(token));
+    const typeParams = typeParamSignature.map((token) => this.context.parseSignatureToken(token));
     const typeParamsStr = typeParams.length > 0 ? `<${typeParams.join(", ")}>` : "";
 
     // Get function signature
     const paramSignature = this.context.getSignature(functionHandle.parameters);
     const returnSignature = this.context.getSignature(functionHandle.return_);
-    
+
     // Format parameters
-    const paramTypes = paramSignature.map(token => this.context.parseSignatureToken(token));
+    const paramTypes = paramSignature.map((token) => this.context.parseSignatureToken(token));
     const paramStr = `(${paramTypes.join(", ")})`;
-    
+
     // Format return type
     let returnStr = "";
     if (returnSignature.length > 0) {
-      const returnTypes = returnSignature.map(token => this.context.parseSignatureToken(token));
+      const returnTypes = returnSignature.map((token) => this.context.parseSignatureToken(token));
       if (returnTypes.length === 1) {
         returnStr = `: ${returnTypes[0]}`;
       } else {

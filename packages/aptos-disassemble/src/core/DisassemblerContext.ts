@@ -10,7 +10,7 @@ export class DisassemblerContext {
   public readonly options: DisassemblerOptions;
 
   constructor(
-    private readonly module: MoveModule, 
+    private readonly module: MoveModule,
     options?: Partial<DisassemblerOptions>
   ) {
     this.options = { ...DEFAULT_DISASSEMBLER_OPTIONS, ...options };

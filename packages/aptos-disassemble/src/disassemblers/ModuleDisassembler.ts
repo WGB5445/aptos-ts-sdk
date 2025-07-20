@@ -201,7 +201,7 @@ export class ModuleDisassembler {
           // Create control flow graph if basic blocks should be printed
           let cfg: VMControlFlowGraph | undefined;
           let blockIdToNumber: Map<number, number> | undefined;
-          
+
           if (this.options.printBasicBlocks) {
             cfg = new VMControlFlowGraph(functionDefinition.code.code);
             // Create mapping from block ID to block number for display
@@ -213,10 +213,10 @@ export class ModuleDisassembler {
 
           functionDefinition.code.code.forEach((instruction, idx) => {
             const instructionStr = instructionDisassembler.disassemble(instruction);
-            
+
             // Check if this instruction starts a new basic block
             if (this.options.printBasicBlocks && cfg && blockIdToNumber) {
-              const blockId = cfg.blocks().find(blockId => cfg!.blockStart(blockId) === idx);
+              const blockId = cfg.blocks().find((blockId) => cfg!.blockStart(blockId) === idx);
               if (blockId !== undefined) {
                 const blockNumber = blockIdToNumber.get(blockId);
                 if (blockNumber !== undefined) {

@@ -82,7 +82,7 @@ class BasicBlock {
  */
 enum Exploration {
   InProgress = "InProgress",
-  Done = "Done"
+  Done = "Done",
 }
 
 const ENTRY_BLOCK_ID: BlockId = 0;
@@ -100,12 +100,12 @@ export class VMControlFlowGraph implements ControlFlowGraph {
 
   constructor(code: Bytecode[]) {
     const codeLen = code.length as CodeOffset;
-    
+
     // First go through and collect block ids, i.e., offsets that begin basic blocks.
     // Need to do this first in order to handle backwards edges.
     const blockIds = new Set<BlockId>();
     blockIds.add(ENTRY_BLOCK_ID);
-    
+
     for (let pc = 0; pc < code.length; pc++) {
       VMControlFlowGraph.recordBlockIds(pc as CodeOffset, code, blockIds);
     }
@@ -114,7 +114,7 @@ export class VMControlFlowGraph implements ControlFlowGraph {
     const basicBlocks = new Map<BlockId, BasicBlock>();
     let entry = 0;
     const exitToEntry = new Map<CodeOffset, BlockId>();
-    
+
     for (let pc = 0; pc < code.length; pc++) {
       const coPc = pc as CodeOffset;
 
@@ -128,7 +128,7 @@ export class VMControlFlowGraph implements ControlFlowGraph {
         entry = coPc + 1;
       }
     }
-    
+
     this.basicBlocks = basicBlocks;
     console.assert(entry === codeLen, `Entry ${entry} should equal code length ${codeLen}`);
 
@@ -162,7 +162,7 @@ export class VMControlFlowGraph implements ControlFlowGraph {
         const successors = this.basicBlocks.get(block)?.successors || [];
         for (const succ of successors) {
           const succExploration = exploration.get(succ);
-          
+
           if (succExploration === undefined) {
             // This successor has never been visited before, add it to the stack to
             // be explored before `block` gets marked `Done`.
