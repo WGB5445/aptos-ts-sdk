@@ -4,7 +4,7 @@ import {
     MoveModule,
     parseSignatureToken,
     StructVariantHandle
-} from "./type/compiledModule";
+} from "./types/compiledModule";
 
 /**
  * Formats a local variable reference (parameter or local variable)

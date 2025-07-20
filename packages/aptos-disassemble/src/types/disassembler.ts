@@ -1,17 +1,12 @@
 import { bcs, Deserializer } from "aptos-bcs";
-import {  AccessSpecifier, Bytecode, CodeUnit, Constant, FieldDefinition, FieldHandle, FieldInstantiation, FunctionAttribute, FunctionDefinition, load_code, load_signature_token, Metadata, ModuleHandle, MoveModule, parseAbilities, parseSignatureToken, SignatureToken, StructDefinition, StructDefInstantiation, StructVariantHandle, StructVariantInstantiation, VariantDefinition, VariantFieldHandle, VariantFieldInstantiation, Visibility } from "./compiledModule";
-import {
-    formatLocalInstruction,
-    getFieldInfo,
-    formatFieldInstruction,
-    formatStructInstruction,
-    formatGenericStructInstruction,
-    getVariantInfo
-} from "../instruction-helpers";
 
-export * from "./compiledModule";
-export * from "./serializedType";
+import { formatLocalInstruction, getFieldInfo, formatFieldInstruction, formatStructInstruction, formatGenericStructInstruction, getVariantInfo } from "../instruction-helpers";
+import { parseSignatureToken, parseAbilities, Bytecode, Constant, Metadata, MoveModule, SignatureToken, CodeUnit, FieldDefinition, FieldHandle, FieldInstantiation, FunctionDefinition, ModuleHandle, StructDefinition, StructDefInstantiation, StructVariantHandle, StructVariantInstantiation, VariantDefinition, VariantFieldHandle, VariantFieldInstantiation, Visibility } from "../new-index";
+import { AccessSpecifier, FunctionAttribute, load_signature_token, load_code } from "./compiledModule";
 
+// Import functions that need to be defined
+// These should be moved from type/compiledModule.ts
+export { load_signature_token, parseAbilities, parseSignatureToken, load_code } from "./compiledModule";
 
 export function disassembleMoveModule(bytecode: Uint8Array | Buffer): MoveModule {
     const des = new Deserializer(bytecode);

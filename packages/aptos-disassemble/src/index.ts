@@ -15,8 +15,8 @@ export * from './types/MoveModule';
 // Export utilities
 export { parseSignatureToken, parseAbilities } from './utils/SignatureUtils';
 
-// Export legacy compatibility functions
-export { disassembleMoveModule, disassemble_instruction } from './type';
+// Export compatibility functions
+export { disassembleMoveModule, disassemble_instruction } from './types';
 
 import { BytecodeLoader } from './loaders/BytecodeLoader';
 import { DisassemblerContext } from './core/DisassemblerContext';

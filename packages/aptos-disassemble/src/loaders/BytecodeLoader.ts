@@ -1,5 +1,5 @@
 
-import { disassembleMoveModule } from '../type';
+import { disassembleMoveModule } from '../types';
 
 /**
  * Loader for Move bytecode modules.

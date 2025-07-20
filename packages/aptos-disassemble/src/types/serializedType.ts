@@ -38,4 +38,3 @@ export function fromU8(value: number): SerializedType {
     default: throw new Error("Unknown serialized type: " + value);
   }
 }
-
