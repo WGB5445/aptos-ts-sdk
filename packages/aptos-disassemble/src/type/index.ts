@@ -835,13 +835,56 @@ export function disassemble_instruction(
             }
             return `${op_name}[${funcHandleIdx}](${function_string}${typeParamsStr})`;
         }
+        case "PackClosureGeneric": 
         case "CallGeneric": {
             // throw new Error("CallGeneric is not implemented yet");
             return `CallGeneric`
         }
+
+        case "LdU16":
+            return `LdU16(${instruction.value})`;
+        case "LdU32":
+            return `LdU32(${instruction.value})`;
+        case "LdU256":
+            return `LdU256(${instruction.value})`;
+        case "VecPack": {
+            return `VecPack(${instruction.elemTyIdx}, ${instruction.numElements})`;
+        }
+        case "VecLen": {
+            return `VecLen(${instruction.elemTyIdx})`;
+        }
+        case "VecImmBorrow": {
+            return `VecImmBorrow(${instruction.elemTyIdx})`;
+        }
+        case "VecMutBorrow": {
+            return `VecMutBorrow(${instruction.elemTyIdx})`;
+        }
+        case "VecPushBack": {
+            return `VecPushBack(${instruction.elemTyIdx})`;
+        }
+        case "VecPopBack": {
+            return `VecPopBack(${instruction.elemTyIdx})`;
+        }
+        case "VecUnpack": {
+            return `VecUnpack(${instruction.elemTyIdx}, ${instruction.numElements})`;
+        }
+        case "VecSwap": {
+            return `VecSwap(${instruction.elemTyIdx})`;
+        }
+        case "BrTrue":
+            return `BrTrue(${instruction.codeOffset})`;
+        case "BrFalse":
+            return `BrFalse(${instruction.codeOffset})`;
+        case "Branch":
+            return `Branch(${instruction.codeOffset})`;
+        case "LdU8":
+            return `LdU8(${instruction.value})`;
+        case "LdU64":
+            return `LdU64(${instruction.value})`;
+        case "LdU128":
+            return `LdU128(${instruction.value})`;
         default:
-            // x => Ok(format!("{:#?}", x)),    
-            return `${instruction.kind}`
+            return `${instruction.kind}`;
 
     }
 }
