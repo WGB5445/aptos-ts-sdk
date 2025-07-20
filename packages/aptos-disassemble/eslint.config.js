@@ -9,6 +9,15 @@ export default [
   js.configs.recommended,
   ...compat.extends('plugin:@typescript-eslint/recommended'),
   {
+    ignores: [
+      'node_modules/',
+      'dist/',
+      'build/',
+      'coverage/',
+      '*.js',
+      '*.cjs',
+      '*.mjs',
+    ],
     files: ['**/*.ts'],
     languageOptions: {
       parser: tsParser,

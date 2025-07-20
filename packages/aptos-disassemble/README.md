@@ -14,10 +14,12 @@ console.log(result);
 ```
 
 ## Scripts
+
 - `pnpm build`: Build the package
 - `pnpm test`: Run tests
 - `pnpm lint`: Lint source files
 - `pnpm fmt`: Format code
 
 ## License
+
 MIT
