@@ -1,0 +1,3978 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`disassembleMoveModule > test string 1`] = `
+{
+  "address_identifiers": [
+    "0000000000000000000000000000000000000000000000000000000000000001",
+  ],
+  "constant_pool": [
+    {
+      "data": Uint8Array [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+      ],
+      "type": {
+        "__signatureTokenBrand": true,
+        "kind": "Address",
+      },
+    },
+    {
+      "data": Uint8Array [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+      ],
+      "type": {
+        "__signatureTokenBrand": true,
+        "kind": "Address",
+      },
+    },
+  ],
+  "field_handles": [
+    {
+      "field": 2,
+      "owner": 0,
+    },
+    {
+      "field": 0,
+      "owner": 0,
+    },
+    {
+      "field": 1,
+      "owner": 0,
+    },
+    {
+      "field": 1,
+      "owner": 1,
+    },
+    {
+      "field": 2,
+      "owner": 1,
+    },
+    {
+      "field": 0,
+      "owner": 1,
+    },
+    {
+      "field": 5,
+      "owner": 3,
+    },
+    {
+      "field": 7,
+      "owner": 3,
+    },
+    {
+      "field": 3,
+      "owner": 3,
+    },
+    {
+      "field": 3,
+      "owner": 0,
+    },
+  ],
+  "field_insts": [],
+  "friend_decls": [
+    {
+      "address": 0,
+      "name": 75,
+    },
+  ],
+  "function_defs": [
+    {
+      "acquiresGlobalResources": [],
+      "code": {
+        "code": [
+          {
+            "kind": "CopyLoc",
+            "localIdx": 0,
+          },
+          {
+            "funcHandleIdx": 1,
+            "kind": "Call",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "LdU64",
+            "value": 0n,
+          },
+          {
+            "kind": "Gt",
+          },
+          {
+            "codeOffset": 22,
+            "kind": "BrFalse",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "LdU32",
+            "value": 2000,
+          },
+          {
+            "kind": "LdU32",
+            "value": 0,
+          },
+          {
+            "funcInstIdx": 0,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "Pack",
+            "structDefIdx": 1,
+          },
+          {
+            "kind": "MoveTo",
+            "structDefIdx": 1,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "LdU64",
+            "value": 0n,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 0,
+          },
+          {
+            "funcInstIdx": 1,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 0,
+          },
+          {
+            "funcInstIdx": 2,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "Pack",
+            "structDefIdx": 0,
+          },
+          {
+            "kind": "MoveTo",
+            "structDefIdx": 0,
+          },
+          {
+            "kind": "Ret",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "Pop",
+          },
+          {
+            "kind": "LdU64",
+            "value": 3n,
+          },
+          {
+            "funcHandleIdx": 4,
+            "kind": "Call",
+          },
+          {
+            "kind": "Abort",
+          },
+        ],
+        "locals": 1,
+      },
+      "function": 0,
+      "isEntry": false,
+      "visibility": "friend",
+    },
+    {
+      "acquiresGlobalResources": [
+        0,
+        1,
+      ],
+      "code": {
+        "code": [
+          {
+            "kind": "ImmBorrowLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 2,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 3,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 4,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 5,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 6,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 7,
+          },
+          {
+            "funcHandleIdx": 6,
+            "kind": "Call",
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 8,
+          },
+          {
+            "kind": "ImmBorrowLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 2,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 3,
+          },
+          {
+            "funcInstIdx": 3,
+            "kind": "CallGeneric",
+          },
+          {
+            "funcHandleIdx": 8,
+            "kind": "Call",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 7,
+          },
+          {
+            "funcHandleIdx": 9,
+            "kind": "Call",
+          },
+          {
+            "kind": "Sub",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 8,
+          },
+          {
+            "kind": "Ge",
+          },
+          {
+            "codeOffset": 22,
+            "kind": "BrTrue",
+          },
+          {
+            "codeOffset": 23,
+            "kind": "Branch",
+          },
+          {
+            "funcHandleIdx": 10,
+            "kind": "Call",
+          },
+          {
+            "kind": "Ret",
+          },
+        ],
+        "locals": 8,
+      },
+      "function": 5,
+      "isEntry": false,
+      "visibility": "private",
+    },
+    {
+      "acquiresGlobalResources": [
+        0,
+        1,
+      ],
+      "code": {
+        "code": [
+          {
+            "kind": "CopyLoc",
+            "localIdx": 0,
+          },
+          {
+            "funcHandleIdx": 11,
+            "kind": "Call",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 4,
+          },
+          {
+            "constIdx": 0,
+            "kind": "LdConst",
+          },
+          {
+            "kind": "Eq",
+          },
+          {
+            "codeOffset": 61,
+            "kind": "BrFalse",
+          },
+          {
+            "kind": "LdTrue",
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 8,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 8,
+          },
+          {
+            "codeOffset": 56,
+            "kind": "BrFalse",
+          },
+          {
+            "funcInstIdx": 4,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 9,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 4,
+          },
+          {
+            "constIdx": 0,
+            "kind": "LdConst",
+          },
+          {
+            "kind": "Neq",
+          },
+          {
+            "codeOffset": 17,
+            "kind": "BrTrue",
+          },
+          {
+            "codeOffset": 21,
+            "kind": "Branch",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 4,
+          },
+          {
+            "funcHandleIdx": 12,
+            "kind": "Call",
+          },
+          {
+            "funcInstIdx": 5,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 9,
+          },
+          {
+            "constIdx": 1,
+            "kind": "LdConst",
+          },
+          {
+            "kind": "MutBorrowGlobal",
+            "structDefIdx": 0,
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 10,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 10,
+          },
+          {
+            "fieldHandleIdx": 0,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "funcInstIdx": 6,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 10,
+          },
+          {
+            "fieldHandleIdx": 1,
+            "kind": "MutBorrowField",
+          },
+          {
+            "kind": "WriteRef",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 2,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 3,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 10,
+          },
+          {
+            "fieldHandleIdx": 1,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "kind": "ReadRef",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 6,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 4,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 5,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 7,
+          },
+          {
+            "kind": "Pack",
+            "structDefIdx": 3,
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 11,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 10,
+          },
+          {
+            "fieldHandleIdx": 0,
+            "kind": "MutBorrowField",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 11,
+          },
+          {
+            "funcHandleIdx": 15,
+            "kind": "Call",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 9,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 5,
+          },
+          {
+            "funcHandleIdx": 16,
+            "kind": "Call",
+          },
+          {
+            "funcHandleIdx": 17,
+            "kind": "Call",
+          },
+          {
+            "funcHandleIdx": 18,
+            "kind": "Call",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 10,
+          },
+          {
+            "fieldHandleIdx": 2,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "kind": "ReadRef",
+          },
+          {
+            "kind": "Ret",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "Pop",
+          },
+          {
+            "kind": "LdU64",
+            "value": 2n,
+          },
+          {
+            "funcHandleIdx": 19,
+            "kind": "Call",
+          },
+          {
+            "kind": "Abort",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 4,
+          },
+          {
+            "funcHandleIdx": 20,
+            "kind": "Call",
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 8,
+          },
+          {
+            "codeOffset": 8,
+            "kind": "Branch",
+          },
+        ],
+        "locals": 20,
+      },
+      "function": 6,
+      "isEntry": false,
+      "visibility": "private",
+    },
+    {
+      "acquiresGlobalResources": [
+        0,
+        1,
+      ],
+      "code": {
+        "code": [
+          {
+            "kind": "ImmBorrowLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 2,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 3,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 4,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 5,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 6,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 7,
+          },
+          {
+            "funcHandleIdx": 6,
+            "kind": "Call",
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 9,
+          },
+          {
+            "kind": "ImmBorrowLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 2,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 3,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 8,
+          },
+          {
+            "funcHandleIdx": 8,
+            "kind": "Call",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 7,
+          },
+          {
+            "funcHandleIdx": 9,
+            "kind": "Call",
+          },
+          {
+            "kind": "Sub",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 9,
+          },
+          {
+            "kind": "Ge",
+          },
+          {
+            "codeOffset": 22,
+            "kind": "BrTrue",
+          },
+          {
+            "codeOffset": 23,
+            "kind": "Branch",
+          },
+          {
+            "funcHandleIdx": 22,
+            "kind": "Call",
+          },
+          {
+            "kind": "Ret",
+          },
+        ],
+        "locals": 8,
+      },
+      "function": 21,
+      "isEntry": false,
+      "visibility": "private",
+    },
+    {
+      "acquiresGlobalResources": [
+        0,
+        1,
+      ],
+      "code": {
+        "code": [
+          {
+            "constIdx": 1,
+            "kind": "LdConst",
+          },
+          {
+            "kind": "MutBorrowGlobal",
+            "structDefIdx": 0,
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "ImmBorrowLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 1,
+          },
+          {
+            "fieldHandleIdx": 0,
+            "kind": "MutBorrowField",
+          },
+          {
+            "constIdx": 0,
+            "kind": "LdConst",
+          },
+          {
+            "kind": "LdU64",
+            "value": 0n,
+          },
+          {
+            "kind": "LdU64",
+            "value": 0n,
+          },
+          {
+            "kind": "LdU64",
+            "value": 0n,
+          },
+          {
+            "elemTyIdx": 23,
+            "kind": "VecPack",
+            "numElements": 0n,
+          },
+          {
+            "constIdx": 0,
+            "kind": "LdConst",
+          },
+          {
+            "elemTyIdx": 8,
+            "kind": "VecPack",
+            "numElements": 0n,
+          },
+          {
+            "kind": "LdU64",
+            "value": 0n,
+          },
+          {
+            "kind": "Pack",
+            "structDefIdx": 3,
+          },
+          {
+            "funcHandleIdx": 15,
+            "kind": "Call",
+          },
+          {
+            "kind": "Ret",
+          },
+        ],
+        "locals": 24,
+      },
+      "function": 23,
+      "isEntry": false,
+      "visibility": "private",
+    },
+    {
+      "acquiresGlobalResources": [
+        1,
+      ],
+      "code": {
+        "code": [
+          {
+            "constIdx": 1,
+            "kind": "LdConst",
+          },
+          {
+            "kind": "Exists",
+            "structDefIdx": 1,
+          },
+          {
+            "codeOffset": 4,
+            "kind": "BrTrue",
+          },
+          {
+            "codeOffset": 38,
+            "kind": "Branch",
+          },
+          {
+            "constIdx": 1,
+            "kind": "LdConst",
+          },
+          {
+            "kind": "MutBorrowGlobal",
+            "structDefIdx": 1,
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 3,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 3,
+          },
+          {
+            "fieldHandleIdx": 3,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "kind": "ReadRef",
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 4,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 3,
+          },
+          {
+            "fieldHandleIdx": 4,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 4,
+          },
+          {
+            "funcInstIdx": 7,
+            "kind": "CallGeneric",
+          },
+          {
+            "codeOffset": 17,
+            "kind": "BrTrue",
+          },
+          {
+            "codeOffset": 22,
+            "kind": "Branch",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 3,
+          },
+          {
+            "fieldHandleIdx": 4,
+            "kind": "MutBorrowField",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 4,
+          },
+          {
+            "funcInstIdx": 8,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "Pop",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 3,
+          },
+          {
+            "fieldHandleIdx": 4,
+            "kind": "MutBorrowField",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 4,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 2,
+          },
+          {
+            "funcInstIdx": 9,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "Nop",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 4,
+          },
+          {
+            "kind": "LdU32",
+            "value": 1,
+          },
+          {
+            "kind": "Add",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 3,
+          },
+          {
+            "fieldHandleIdx": 5,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "kind": "ReadRef",
+          },
+          {
+            "kind": "Mod",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 3,
+          },
+          {
+            "fieldHandleIdx": 3,
+            "kind": "MutBorrowField",
+          },
+          {
+            "kind": "WriteRef",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "ImmBorrowLoc",
+            "localIdx": 2,
+          },
+          {
+            "fieldHandleIdx": 6,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "kind": "ReadRef",
+          },
+          {
+            "kind": "ImmBorrowLoc",
+            "localIdx": 2,
+          },
+          {
+            "fieldHandleIdx": 7,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "kind": "ReadRef",
+          },
+          {
+            "funcHandleIdx": 27,
+            "kind": "Call",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "FreezeRef",
+          },
+          {
+            "funcInstIdx": 6,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "ImmBorrowLoc",
+            "localIdx": 2,
+          },
+          {
+            "fieldHandleIdx": 8,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "kind": "ReadRef",
+          },
+          {
+            "kind": "Eq",
+          },
+          {
+            "codeOffset": 58,
+            "kind": "BrFalse",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 2,
+          },
+          {
+            "funcInstIdx": 10,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "Ret",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "Pop",
+          },
+          {
+            "kind": "LdU64",
+            "value": 1n,
+          },
+          {
+            "funcHandleIdx": 4,
+            "kind": "Call",
+          },
+          {
+            "kind": "Abort",
+          },
+        ],
+        "locals": 31,
+      },
+      "function": 15,
+      "isEntry": false,
+      "visibility": "private",
+    },
+    {
+      "acquiresGlobalResources": [
+        0,
+        1,
+      ],
+      "code": {
+        "code": [
+          {
+            "kind": "CopyLoc",
+            "localIdx": 0,
+          },
+          {
+            "funcHandleIdx": 11,
+            "kind": "Call",
+          },
+          {
+            "constIdx": 1,
+            "kind": "LdConst",
+          },
+          {
+            "kind": "MutBorrowGlobal",
+            "structDefIdx": 0,
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 2,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 2,
+          },
+          {
+            "fieldHandleIdx": 0,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "funcInstIdx": 6,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 2,
+          },
+          {
+            "fieldHandleIdx": 1,
+            "kind": "MutBorrowField",
+          },
+          {
+            "kind": "WriteRef",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 2,
+          },
+          {
+            "fieldHandleIdx": 0,
+            "kind": "MutBorrowField",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 1,
+          },
+          {
+            "funcHandleIdx": 17,
+            "kind": "Call",
+          },
+          {
+            "kind": "LdU64",
+            "value": 18446744073709551615n,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 2,
+          },
+          {
+            "fieldHandleIdx": 1,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "kind": "ReadRef",
+          },
+          {
+            "elemTyIdx": 23,
+            "kind": "VecPack",
+            "numElements": 0n,
+          },
+          {
+            "constIdx": 0,
+            "kind": "LdConst",
+          },
+          {
+            "elemTyIdx": 8,
+            "kind": "VecPack",
+            "numElements": 0n,
+          },
+          {
+            "funcHandleIdx": 30,
+            "kind": "Call",
+          },
+          {
+            "kind": "Pack",
+            "structDefIdx": 3,
+          },
+          {
+            "funcHandleIdx": 15,
+            "kind": "Call",
+          },
+          {
+            "kind": "Ret",
+          },
+        ],
+        "locals": 24,
+      },
+      "function": 29,
+      "isEntry": false,
+      "visibility": "public",
+    },
+    {
+      "acquiresGlobalResources": [
+        0,
+      ],
+      "code": {
+        "code": [
+          {
+            "constIdx": 1,
+            "kind": "LdConst",
+          },
+          {
+            "kind": "ImmBorrowGlobal",
+            "structDefIdx": 0,
+          },
+          {
+            "fieldHandleIdx": 1,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "kind": "ReadRef",
+          },
+          {
+            "kind": "Ret",
+          },
+        ],
+        "locals": 1,
+      },
+      "function": 31,
+      "isEntry": false,
+      "visibility": "public",
+    },
+    {
+      "acquiresGlobalResources": [
+        0,
+      ],
+      "code": {
+        "code": [
+          {
+            "constIdx": 1,
+            "kind": "LdConst",
+          },
+          {
+            "kind": "ImmBorrowGlobal",
+            "structDefIdx": 0,
+          },
+          {
+            "fieldHandleIdx": 2,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "kind": "ReadRef",
+          },
+          {
+            "kind": "LdU64",
+            "value": 1000000n,
+          },
+          {
+            "kind": "Div",
+          },
+          {
+            "kind": "Ret",
+          },
+        ],
+        "locals": 1,
+      },
+      "function": 32,
+      "isEntry": false,
+      "visibility": "public",
+    },
+    {
+      "acquiresGlobalResources": [],
+      "code": {
+        "code": [
+          {
+            "kind": "CopyLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "LdU32",
+            "value": 0,
+          },
+          {
+            "kind": "Gt",
+          },
+          {
+            "codeOffset": 11,
+            "kind": "BrFalse",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "LdU32",
+            "value": 0,
+          },
+          {
+            "funcInstIdx": 0,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "Pack",
+            "structDefIdx": 1,
+          },
+          {
+            "kind": "MoveTo",
+            "structDefIdx": 1,
+          },
+          {
+            "kind": "Ret",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 0,
+          },
+          {
+            "kind": "Pop",
+          },
+          {
+            "kind": "LdU64",
+            "value": 3n,
+          },
+          {
+            "funcHandleIdx": 4,
+            "kind": "Call",
+          },
+          {
+            "kind": "Abort",
+          },
+        ],
+        "locals": 1,
+      },
+      "function": 33,
+      "isEntry": false,
+      "visibility": "public",
+    },
+    {
+      "acquiresGlobalResources": [
+        0,
+      ],
+      "code": {
+        "code": [
+          {
+            "kind": "MoveLoc",
+            "localIdx": 0,
+          },
+          {
+            "funcHandleIdx": 1,
+            "kind": "Call",
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "LdU64",
+            "value": 0n,
+          },
+          {
+            "kind": "Gt",
+          },
+          {
+            "codeOffset": 35,
+            "kind": "BrFalse",
+          },
+          {
+            "constIdx": 1,
+            "kind": "LdConst",
+          },
+          {
+            "kind": "MutBorrowGlobal",
+            "structDefIdx": 0,
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 2,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 2,
+          },
+          {
+            "fieldHandleIdx": 2,
+            "kind": "ImmBorrowField",
+          },
+          {
+            "kind": "ReadRef",
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 3,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 2,
+          },
+          {
+            "fieldHandleIdx": 2,
+            "kind": "MutBorrowField",
+          },
+          {
+            "kind": "StLoc",
+            "localIdx": 4,
+          },
+          {
+            "kind": "CopyLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 4,
+          },
+          {
+            "kind": "WriteRef",
+          },
+          {
+            "funcHandleIdx": 35,
+            "kind": "Call",
+          },
+          {
+            "codeOffset": 28,
+            "kind": "BrFalse",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 2,
+          },
+          {
+            "kind": "Pop",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 3,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "Pack",
+            "structDefIdx": 4,
+          },
+          {
+            "funcInstIdx": 11,
+            "kind": "CallGeneric",
+          },
+          {
+            "kind": "Ret",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 2,
+          },
+          {
+            "fieldHandleIdx": 9,
+            "kind": "MutBorrowField",
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 3,
+          },
+          {
+            "kind": "MoveLoc",
+            "localIdx": 1,
+          },
+          {
+            "kind": "Pack",
+            "structDefIdx": 5,
+          },
+          {
+            "funcInstIdx": 12,
+            "kind": "CallGeneric",
+          },
+          {
+            "codeOffset": 27,
+            "kind": "Branch",
+          },
+          {
+            "kind": "LdU64",
+            "value": 3n,
+          },
+          {
+            "funcHandleIdx": 4,
+            "kind": "Call",
+          },
+          {
+            "kind": "Abort",
+          },
+        ],
+        "locals": 35,
+      },
+      "function": 34,
+      "isEntry": false,
+      "visibility": "public",
+    },
+  ],
+  "function_handles": [
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 0,
+      "name": 27,
+      "parameters": 0,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 3,
+      "name": 29,
+      "parameters": 2,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 2,
+      "name": 30,
+      "parameters": 1,
+      "return_": 4,
+      "type_parameters": [
+        3,
+        4,
+      ],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 4,
+      "name": 32,
+      "parameters": 2,
+      "return_": 6,
+      "type_parameters": [
+        6,
+      ],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 5,
+      "name": 34,
+      "parameters": 8,
+      "return_": 8,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 0,
+      "name": 35,
+      "parameters": 9,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 0,
+      "name": 36,
+      "parameters": 10,
+      "return_": 8,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 6,
+      "name": 38,
+      "parameters": 1,
+      "return_": 12,
+      "type_parameters": [
+        0,
+      ],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 7,
+      "name": 41,
+      "parameters": 13,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 8,
+      "name": 43,
+      "parameters": 1,
+      "return_": 8,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 8,
+      "name": 44,
+      "parameters": 1,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 3,
+      "name": 45,
+      "parameters": 2,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 9,
+      "name": 47,
+      "parameters": 14,
+      "return_": 8,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 6,
+      "name": 48,
+      "parameters": 15,
+      "return_": 12,
+      "type_parameters": [
+        0,
+      ],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 1,
+      "name": 49,
+      "parameters": 16,
+      "return_": 8,
+      "type_parameters": [
+        6,
+      ],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 0,
+      "name": 50,
+      "parameters": 17,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 9,
+      "name": 51,
+      "parameters": 18,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 8,
+      "name": 52,
+      "parameters": 1,
+      "return_": 8,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 10,
+      "name": 41,
+      "parameters": 8,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 5,
+      "name": 54,
+      "parameters": 8,
+      "return_": 8,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 9,
+      "name": 55,
+      "parameters": 14,
+      "return_": 19,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 0,
+      "name": 56,
+      "parameters": 21,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 11,
+      "name": 58,
+      "parameters": 1,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 0,
+      "name": 59,
+      "parameters": 22,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 2,
+      "name": 60,
+      "parameters": 25,
+      "return_": 19,
+      "type_parameters": [
+        3,
+        0,
+      ],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 2,
+      "name": 61,
+      "parameters": 26,
+      "return_": 27,
+      "type_parameters": [
+        3,
+        0,
+      ],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 2,
+      "name": 62,
+      "parameters": 28,
+      "return_": 1,
+      "type_parameters": [
+        3,
+        0,
+      ],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 12,
+      "name": 64,
+      "parameters": 29,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 1,
+      "name": 65,
+      "parameters": 30,
+      "return_": 1,
+      "type_parameters": [
+        6,
+      ],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 0,
+      "name": 66,
+      "parameters": 32,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 12,
+      "name": 67,
+      "parameters": 1,
+      "return_": 8,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 0,
+      "name": 68,
+      "parameters": 1,
+      "return_": 8,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 0,
+      "name": 69,
+      "parameters": 1,
+      "return_": 8,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 0,
+      "name": 70,
+      "parameters": 33,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 0,
+      "name": 71,
+      "parameters": 0,
+      "return_": 1,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 13,
+      "name": 73,
+      "parameters": 1,
+      "return_": 19,
+      "type_parameters": [],
+    },
+    {
+      "access_specifiers": null,
+      "attributes": null,
+      "module": 1,
+      "name": 74,
+      "parameters": 15,
+      "return_": 1,
+      "type_parameters": [
+        6,
+      ],
+    },
+  ],
+  "function_inst": [
+    {
+      "handle": 2,
+      "type_parameters": 3,
+    },
+    {
+      "handle": 3,
+      "type_parameters": 5,
+    },
+    {
+      "handle": 3,
+      "type_parameters": 7,
+    },
+    {
+      "handle": 7,
+      "type_parameters": 11,
+    },
+    {
+      "handle": 7,
+      "type_parameters": 8,
+    },
+    {
+      "handle": 13,
+      "type_parameters": 8,
+    },
+    {
+      "handle": 14,
+      "type_parameters": 5,
+    },
+    {
+      "handle": 24,
+      "type_parameters": 3,
+    },
+    {
+      "handle": 25,
+      "type_parameters": 3,
+    },
+    {
+      "handle": 26,
+      "type_parameters": 3,
+    },
+    {
+      "handle": 28,
+      "type_parameters": 5,
+    },
+    {
+      "handle": 36,
+      "type_parameters": 34,
+    },
+    {
+      "handle": 28,
+      "type_parameters": 7,
+    },
+  ],
+  "identifiers": [
+    "block",
+    "BlockResource",
+    "height",
+    "epoch_interval",
+    "new_block_events",
+    "EventHandle",
+    "event",
+    "NewBlockEvent",
+    "update_epoch_interval_events",
+    "UpdateEpochIntervalEvent",
+    "CommitHistory",
+    "max_capacity",
+    "next_idx",
+    "table",
+    "TableWithLength",
+    "table_with_length",
+    "NewBlock",
+    "hash",
+    "epoch",
+    "round",
+    "previous_block_votes_bitvec",
+    "proposer",
+    "failed_proposer_indices",
+    "time_microseconds",
+    "UpdateEpochInterval",
+    "old_epoch_interval",
+    "new_epoch_interval",
+    "initialize",
+    "system_addresses",
+    "assert_aptos_framework",
+    "new",
+    "account",
+    "new_event_handle",
+    "error",
+    "invalid_argument",
+    "block_prologue",
+    "block_prologue_common",
+    "option",
+    "none",
+    "Option",
+    "randomness",
+    "on_new_block",
+    "reconfiguration",
+    "last_reconfiguration_time",
+    "reconfigure",
+    "assert_vm",
+    "stake",
+    "get_validator_index",
+    "some",
+    "counter",
+    "emit_new_block_event",
+    "update_performance_statistics",
+    "current_epoch",
+    "state_storage",
+    "permission_denied",
+    "is_current_epoch_validator",
+    "block_prologue_ext",
+    "reconfiguration_with_dkg",
+    "try_start",
+    "emit_genesis_block_event",
+    "contains",
+    "remove",
+    "add",
+    "timestamp",
+    "update_global_time",
+    "emit_event",
+    "emit_writeset_block_event",
+    "now_microseconds",
+    "get_current_block_height",
+    "get_epoch_interval_secs",
+    "initialize_commit_history",
+    "update_epoch_interval_microsecs",
+    "features",
+    "module_event_migration_enabled",
+    "emit",
+    "genesis",
+  ],
+  "magic": 199957665,
+  "metadatas": [
+    {
+      "key": Uint8Array [
+        99,
+        111,
+        109,
+        112,
+        105,
+        108,
+        97,
+        116,
+        105,
+        111,
+        110,
+        95,
+        109,
+        101,
+        116,
+        97,
+        100,
+        97,
+        116,
+        97,
+      ],
+      "value": Uint8Array [
+        0,
+        3,
+        50,
+        46,
+        48,
+        3,
+        50,
+        46,
+        49,
+      ],
+    },
+    {
+      "key": Uint8Array [
+        97,
+        112,
+        116,
+        111,
+        115,
+        58,
+        58,
+        109,
+        101,
+        116,
+        97,
+        100,
+        97,
+        116,
+        97,
+        95,
+        118,
+        49,
+      ],
+      "value": Uint8Array [
+        3,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        49,
+        69,
+        78,
+        85,
+        77,
+        95,
+        78,
+        69,
+        87,
+        95,
+        66,
+        76,
+        79,
+        67,
+        75,
+        95,
+        69,
+        86,
+        69,
+        78,
+        84,
+        83,
+        95,
+        68,
+        79,
+        69,
+        83,
+        95,
+        78,
+        79,
+        84,
+        95,
+        77,
+        65,
+        84,
+        67,
+        72,
+        95,
+        66,
+        76,
+        79,
+        67,
+        75,
+        95,
+        72,
+        69,
+        73,
+        71,
+        72,
+        84,
+        71,
+        84,
+        104,
+        101,
+        32,
+        110,
+        117,
+        109,
+        98,
+        101,
+        114,
+        32,
+        111,
+        102,
+        32,
+        110,
+        101,
+        119,
+        32,
+        98,
+        108,
+        111,
+        99,
+        107,
+        32,
+        101,
+        118,
+        101,
+        110,
+        116,
+        115,
+        32,
+        100,
+        111,
+        101,
+        115,
+        32,
+        110,
+        111,
+        116,
+        32,
+        101,
+        113,
+        117,
+        97,
+        108,
+        32,
+        116,
+        104,
+        101,
+        32,
+        99,
+        117,
+        114,
+        114,
+        101,
+        110,
+        116,
+        32,
+        98,
+        108,
+        111,
+        99,
+        107,
+        32,
+        104,
+        101,
+        105,
+        103,
+        104,
+        116,
+        46,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        17,
+        69,
+        73,
+        78,
+        86,
+        65,
+        76,
+        73,
+        68,
+        95,
+        80,
+        82,
+        79,
+        80,
+        79,
+        83,
+        69,
+        82,
+        92,
+        65,
+        110,
+        32,
+        105,
+        110,
+        118,
+        97,
+        108,
+        105,
+        100,
+        32,
+        112,
+        114,
+        111,
+        112,
+        111,
+        115,
+        101,
+        114,
+        32,
+        119,
+        97,
+        115,
+        32,
+        112,
+        114,
+        111,
+        118,
+        105,
+        100,
+        101,
+        100,
+        46,
+        32,
+        69,
+        120,
+        112,
+        101,
+        99,
+        116,
+        101,
+        100,
+        32,
+        116,
+        104,
+        101,
+        32,
+        112,
+        114,
+        111,
+        112,
+        111,
+        115,
+        101,
+        114,
+        32,
+        116,
+        111,
+        32,
+        98,
+        101,
+        32,
+        116,
+        104,
+        101,
+        32,
+        86,
+        77,
+        32,
+        111,
+        114,
+        32,
+        97,
+        110,
+        32,
+        97,
+        99,
+        116,
+        105,
+        118,
+        101,
+        32,
+        118,
+        97,
+        108,
+        105,
+        100,
+        97,
+        116,
+        111,
+        114,
+        46,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        18,
+        69,
+        90,
+        69,
+        82,
+        79,
+        95,
+        77,
+        65,
+        88,
+        95,
+        67,
+        65,
+        80,
+        65,
+        67,
+        73,
+        84,
+        89,
+        55,
+        84,
+        104,
+        101,
+        32,
+        109,
+        97,
+        120,
+        105,
+        109,
+        117,
+        109,
+        32,
+        99,
+        97,
+        112,
+        97,
+        99,
+        105,
+        116,
+        121,
+        32,
+        111,
+        102,
+        32,
+        116,
+        104,
+        101,
+        32,
+        99,
+        111,
+        109,
+        109,
+        105,
+        116,
+        32,
+        104,
+        105,
+        115,
+        116,
+        111,
+        114,
+        121,
+        32,
+        99,
+        97,
+        110,
+        110,
+        111,
+        116,
+        32,
+        98,
+        101,
+        32,
+        48,
+        46,
+        2,
+        8,
+        78,
+        101,
+        119,
+        66,
+        108,
+        111,
+        99,
+        107,
+        1,
+        4,
+        0,
+        19,
+        85,
+        112,
+        100,
+        97,
+        116,
+        101,
+        69,
+        112,
+        111,
+        99,
+        104,
+        73,
+        110,
+        116,
+        101,
+        114,
+        118,
+        97,
+        108,
+        1,
+        4,
+        0,
+        2,
+        23,
+        103,
+        101,
+        116,
+        95,
+        101,
+        112,
+        111,
+        99,
+        104,
+        95,
+        105,
+        110,
+        116,
+        101,
+        114,
+        118,
+        97,
+        108,
+        95,
+        115,
+        101,
+        99,
+        115,
+        1,
+        1,
+        0,
+        24,
+        103,
+        101,
+        116,
+        95,
+        99,
+        117,
+        114,
+        114,
+        101,
+        110,
+        116,
+        95,
+        98,
+        108,
+        111,
+        99,
+        107,
+        95,
+        104,
+        101,
+        105,
+        103,
+        104,
+        116,
+        1,
+        1,
+        0,
+      ],
+    },
+  ],
+  "module_handles": [
+    {
+      "address": 0,
+      "name": 0,
+    },
+    {
+      "address": 0,
+      "name": 6,
+    },
+    {
+      "address": 0,
+      "name": 15,
+    },
+    {
+      "address": 0,
+      "name": 28,
+    },
+    {
+      "address": 0,
+      "name": 31,
+    },
+    {
+      "address": 0,
+      "name": 33,
+    },
+    {
+      "address": 0,
+      "name": 37,
+    },
+    {
+      "address": 0,
+      "name": 40,
+    },
+    {
+      "address": 0,
+      "name": 42,
+    },
+    {
+      "address": 0,
+      "name": 46,
+    },
+    {
+      "address": 0,
+      "name": 53,
+    },
+    {
+      "address": 0,
+      "name": 57,
+    },
+    {
+      "address": 0,
+      "name": 63,
+    },
+    {
+      "address": 0,
+      "name": 72,
+    },
+  ],
+  "selfModuleHandleIdx": 0,
+  "signatures": [
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Reference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "Signer",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+    ],
+    [],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Reference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "Signer",
+        },
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U32",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "handle": 2,
+        "kind": "Struct",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "handle": 5,
+        "kind": "StructInstantiation",
+        "typeParams": [
+          {
+            "__signatureTokenBrand": true,
+            "index": 0,
+            "kind": "TypeParameter",
+          },
+          {
+            "__signatureTokenBrand": true,
+            "index": 1,
+            "kind": "TypeParameter",
+          },
+        ],
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "handle": 2,
+        "kind": "Struct",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "handle": 1,
+        "kind": "StructInstantiation",
+        "typeParams": [
+          {
+            "__signatureTokenBrand": true,
+            "index": 0,
+            "kind": "TypeParameter",
+          },
+        ],
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "handle": 3,
+        "kind": "Struct",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Signer",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Address",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Address",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Vector",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "U64",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Vector",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "U8",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Reference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "Signer",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Address",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Address",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Vector",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "U64",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Vector",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "U8",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Vector",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "U8",
+        },
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "handle": 8,
+        "kind": "StructInstantiation",
+        "typeParams": [
+          {
+            "__signatureTokenBrand": true,
+            "index": 0,
+            "kind": "TypeParameter",
+          },
+        ],
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Reference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "Signer",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "handle": 8,
+        "kind": "StructInstantiation",
+        "typeParams": [
+          {
+            "__signatureTokenBrand": true,
+            "kind": "Vector",
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U8",
+            },
+          },
+        ],
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Address",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "index": 0,
+        "kind": "TypeParameter",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Reference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "handle": 1,
+          "kind": "StructInstantiation",
+          "typeParams": [
+            {
+              "__signatureTokenBrand": true,
+              "index": 0,
+              "kind": "TypeParameter",
+            },
+          ],
+        },
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Reference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "Signer",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "MutableReference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "handle": 1,
+          "kind": "StructInstantiation",
+          "typeParams": [
+            {
+              "__signatureTokenBrand": true,
+              "handle": 2,
+              "kind": "Struct",
+            },
+          ],
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "handle": 2,
+        "kind": "Struct",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "handle": 8,
+        "kind": "StructInstantiation",
+        "typeParams": [
+          {
+            "__signatureTokenBrand": true,
+            "kind": "U64",
+          },
+        ],
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Vector",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "U64",
+        },
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Bool",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Bool",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "handle": 8,
+        "kind": "StructInstantiation",
+        "typeParams": [
+          {
+            "__signatureTokenBrand": true,
+            "kind": "U64",
+          },
+        ],
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "MutableReference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "handle": 0,
+          "kind": "Struct",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "handle": 2,
+        "kind": "Struct",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Signer",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Address",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Address",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Vector",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "U64",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Vector",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "U8",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "handle": 8,
+        "kind": "StructInstantiation",
+        "typeParams": [
+          {
+            "__signatureTokenBrand": true,
+            "kind": "Vector",
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U8",
+            },
+          },
+        ],
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Signer",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U8",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "MutableReference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "handle": 0,
+          "kind": "Struct",
+        },
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Reference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "handle": 5,
+          "kind": "StructInstantiation",
+          "typeParams": [
+            {
+              "__signatureTokenBrand": true,
+              "index": 0,
+              "kind": "TypeParameter",
+            },
+            {
+              "__signatureTokenBrand": true,
+              "index": 1,
+              "kind": "TypeParameter",
+            },
+          ],
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "index": 0,
+        "kind": "TypeParameter",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "MutableReference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "handle": 5,
+          "kind": "StructInstantiation",
+          "typeParams": [
+            {
+              "__signatureTokenBrand": true,
+              "index": 0,
+              "kind": "TypeParameter",
+            },
+            {
+              "__signatureTokenBrand": true,
+              "index": 1,
+              "kind": "TypeParameter",
+            },
+          ],
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "index": 0,
+        "kind": "TypeParameter",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "index": 1,
+        "kind": "TypeParameter",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "MutableReference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "handle": 5,
+          "kind": "StructInstantiation",
+          "typeParams": [
+            {
+              "__signatureTokenBrand": true,
+              "index": 0,
+              "kind": "TypeParameter",
+            },
+            {
+              "__signatureTokenBrand": true,
+              "index": 1,
+              "kind": "TypeParameter",
+            },
+          ],
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "index": 0,
+        "kind": "TypeParameter",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "index": 1,
+        "kind": "TypeParameter",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Reference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "Signer",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Address",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "MutableReference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "handle": 1,
+          "kind": "StructInstantiation",
+          "typeParams": [
+            {
+              "__signatureTokenBrand": true,
+              "index": 0,
+              "kind": "TypeParameter",
+            },
+          ],
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "index": 0,
+        "kind": "TypeParameter",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "MutableReference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "handle": 4,
+          "kind": "Struct",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U32",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Reference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "Signer",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Address",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "Reference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "Signer",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U32",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "handle": 7,
+        "kind": "Struct",
+      },
+    ],
+    [
+      {
+        "__signatureTokenBrand": true,
+        "kind": "MutableReference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "handle": 0,
+          "kind": "Struct",
+        },
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "U64",
+      },
+      {
+        "__signatureTokenBrand": true,
+        "kind": "MutableReference",
+        "type": {
+          "__signatureTokenBrand": true,
+          "kind": "U64",
+        },
+      },
+    ],
+  ],
+  "struct_defs": [
+    {
+      "field_information": {
+        "fields": [
+          {
+            "name": 2,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+          {
+            "name": 3,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+          {
+            "name": 4,
+            "type": {
+              "__signatureTokenBrand": true,
+              "handle": 1,
+              "kind": "StructInstantiation",
+              "typeParams": [
+                {
+                  "__signatureTokenBrand": true,
+                  "handle": 2,
+                  "kind": "Struct",
+                },
+              ],
+            },
+          },
+          {
+            "name": 8,
+            "type": {
+              "__signatureTokenBrand": true,
+              "handle": 1,
+              "kind": "StructInstantiation",
+              "typeParams": [
+                {
+                  "__signatureTokenBrand": true,
+                  "handle": 3,
+                  "kind": "Struct",
+                },
+              ],
+            },
+          },
+        ],
+        "kind": "Declared",
+      },
+      "struct_handle": 0,
+    },
+    {
+      "field_information": {
+        "fields": [
+          {
+            "name": 11,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U32",
+            },
+          },
+          {
+            "name": 12,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U32",
+            },
+          },
+          {
+            "name": 13,
+            "type": {
+              "__signatureTokenBrand": true,
+              "handle": 5,
+              "kind": "StructInstantiation",
+              "typeParams": [
+                {
+                  "__signatureTokenBrand": true,
+                  "kind": "U32",
+                },
+                {
+                  "__signatureTokenBrand": true,
+                  "handle": 2,
+                  "kind": "Struct",
+                },
+              ],
+            },
+          },
+        ],
+        "kind": "Declared",
+      },
+      "struct_handle": 4,
+    },
+    {
+      "field_information": {
+        "fields": [
+          {
+            "name": 17,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "Address",
+            },
+          },
+          {
+            "name": 18,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+          {
+            "name": 19,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+          {
+            "name": 2,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+          {
+            "name": 20,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "Vector",
+              "type": {
+                "__signatureTokenBrand": true,
+                "kind": "U8",
+              },
+            },
+          },
+          {
+            "name": 21,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "Address",
+            },
+          },
+          {
+            "name": 22,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "Vector",
+              "type": {
+                "__signatureTokenBrand": true,
+                "kind": "U64",
+              },
+            },
+          },
+          {
+            "name": 23,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+        ],
+        "kind": "Declared",
+      },
+      "struct_handle": 6,
+    },
+    {
+      "field_information": {
+        "fields": [
+          {
+            "name": 17,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "Address",
+            },
+          },
+          {
+            "name": 18,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+          {
+            "name": 19,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+          {
+            "name": 2,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+          {
+            "name": 20,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "Vector",
+              "type": {
+                "__signatureTokenBrand": true,
+                "kind": "U8",
+              },
+            },
+          },
+          {
+            "name": 21,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "Address",
+            },
+          },
+          {
+            "name": 22,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "Vector",
+              "type": {
+                "__signatureTokenBrand": true,
+                "kind": "U64",
+              },
+            },
+          },
+          {
+            "name": 23,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+        ],
+        "kind": "Declared",
+      },
+      "struct_handle": 2,
+    },
+    {
+      "field_information": {
+        "fields": [
+          {
+            "name": 25,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+          {
+            "name": 26,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+        ],
+        "kind": "Declared",
+      },
+      "struct_handle": 7,
+    },
+    {
+      "field_information": {
+        "fields": [
+          {
+            "name": 25,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+          {
+            "name": 26,
+            "type": {
+              "__signatureTokenBrand": true,
+              "kind": "U64",
+            },
+          },
+        ],
+        "kind": "Declared",
+      },
+      "struct_handle": 3,
+    },
+  ],
+  "struct_defs_inst": [],
+  "struct_handles": [
+    {
+      "abilities": 8,
+      "module": 0,
+      "name": 1,
+      "type_parameters": [],
+    },
+    {
+      "abilities": 4,
+      "module": 1,
+      "name": 5,
+      "type_parameters": [
+        {
+          "constraints": 6,
+          "is_phantom": true,
+        },
+      ],
+    },
+    {
+      "abilities": 7,
+      "module": 0,
+      "name": 7,
+      "type_parameters": [],
+    },
+    {
+      "abilities": 6,
+      "module": 0,
+      "name": 9,
+      "type_parameters": [],
+    },
+    {
+      "abilities": 8,
+      "module": 0,
+      "name": 10,
+      "type_parameters": [],
+    },
+    {
+      "abilities": 4,
+      "module": 2,
+      "name": 14,
+      "type_parameters": [
+        {
+          "constraints": 3,
+          "is_phantom": true,
+        },
+        {
+          "constraints": 0,
+          "is_phantom": true,
+        },
+      ],
+    },
+    {
+      "abilities": 6,
+      "module": 0,
+      "name": 16,
+      "type_parameters": [],
+    },
+    {
+      "abilities": 6,
+      "module": 0,
+      "name": 24,
+      "type_parameters": [],
+    },
+    {
+      "abilities": 7,
+      "module": 6,
+      "name": 39,
+      "type_parameters": [
+        {
+          "constraints": 0,
+          "is_phantom": false,
+        },
+      ],
+    },
+  ],
+  "struct_variant_handles": [],
+  "struct_variant_inst": [],
+  "variant_field_handles": [],
+  "variant_field_inst": [],
+  "version": 7,
+}
+`;
+
+exports[`disassembleMoveModule > test string 2`] = `
+"// Move bytecode v7
+module 0000000000000000000000000000000000000000000000000000000000000001::block {
+
+use 0000000000000000000000000000000000000000000000000000000000000001::event;
+use 0000000000000000000000000000000000000000000000000000000000000001::table_with_length;
+use 0000000000000000000000000000000000000000000000000000000000000001::system_addresses;
+use 0000000000000000000000000000000000000000000000000000000000000001::account;
+use 0000000000000000000000000000000000000000000000000000000000000001::error;
+use 0000000000000000000000000000000000000000000000000000000000000001::option;
+use 0000000000000000000000000000000000000000000000000000000000000001::randomness;
+use 0000000000000000000000000000000000000000000000000000000000000001::reconfiguration;
+use 0000000000000000000000000000000000000000000000000000000000000001::stake;
+use 0000000000000000000000000000000000000000000000000000000000000001::state_storage;
+use 0000000000000000000000000000000000000000000000000000000000000001::reconfiguration_with_dkg;
+use 0000000000000000000000000000000000000000000000000000000000000001::timestamp;
+use 0000000000000000000000000000000000000000000000000000000000000001::features;
+
+struct BlockResource has key {
+  height: u64,
+  epoch_interval: u64,
+  new_block_events: event::EventHandle<NewBlockEvent>,
+  update_epoch_interval_events: event::EventHandle<UpdateEpochIntervalEvent>
+}
+struct CommitHistory has key {
+  max_capacity: u32,
+  next_idx: u32,
+  table: table_with_length::TableWithLength<u32, NewBlockEvent>
+}
+struct NewBlock has drop, store {
+  hash: address,
+  epoch: u64,
+  round: u64,
+  height: u64,
+  previous_block_votes_bitvec: vector<u8>,
+  proposer: address,
+  failed_proposer_indices: vector<u64>,
+  time_microseconds: u64
+}
+struct NewBlockEvent has copy, drop, store {
+  hash: address,
+  epoch: u64,
+  round: u64,
+  height: u64,
+  previous_block_votes_bitvec: vector<u8>,
+  proposer: address,
+  failed_proposer_indices: vector<u64>,
+  time_microseconds: u64
+}
+struct UpdateEpochInterval has drop, store {
+  old_epoch_interval: u64,
+  new_epoch_interval: u64
+}
+struct UpdateEpochIntervalEvent has drop, store {
+  old_epoch_interval: u64,
+  new_epoch_interval: u64
+}
+
+ public(friend) fun initialize ( arg0: &signer, arg1: u64 ) {
+
+B0:
+    0   :      CopyLoc[0](arg0: &signer)
+    1   :      Call[1](system_addresses::assert_aptos_framework)
+    2   :      CopyLoc[1](arg1: u64)
+    3   :      LdU64(0)
+    4   :      Gt
+    5   :      BrFalse(22)
+    6   :      CopyLoc[0](arg0: &signer)
+    7   :      LdU32(2000)
+    8   :      LdU32(0)
+    9   :      CallGeneric
+    10  :      Pack[1](CommitHistory)
+    11  :      MoveTo[1](CommitHistory)
+    12  :      CopyLoc[0](arg0: &signer)
+    13  :      LdU64(0)
+    14  :      MoveLoc[1](arg1: u64)
+    15  :      CopyLoc[0](arg0: &signer)
+    16  :      CallGeneric
+    17  :      MoveLoc[0](arg0: &signer)
+    18  :      CallGeneric
+    19  :      Pack[0](BlockResource)
+    20  :      MoveTo[0](BlockResource)
+    21  :      Ret
+    22  :      MoveLoc[0](arg0: &signer)
+    23  :      Pop
+    24  :      LdU64(3)
+    25  :      Call[4](error::invalid_argument)
+    26  :      Abort
+}
+
+ fun block_prologue ( arg0: signer, arg1: address, arg2: u64, arg3: u64, arg4: address, arg5: vector<u64>, arg6: vector<u8>, arg7: u64 ) {
+
+L8 loc0: u64
+B0:
+    0   :      ImmBorrowLoc[0](arg0: signer)
+    1   :      MoveLoc[1](arg1: address)
+    2   :      CopyLoc[2](arg2: u64)
+    3   :      CopyLoc[3](arg3: u64)
+    4   :      MoveLoc[4](arg4: address)
+    5   :      MoveLoc[5](arg5: vector<u64>)
+    6   :      MoveLoc[6](arg6: vector<u8>)
+    7   :      CopyLoc[7](arg7: u64)
+    8   :      Call[6](block_prologue_common)
+    9   :      StLoc[8](loc0: u64)
+    10  :      ImmBorrowLoc[0](arg0: signer)
+    11  :      MoveLoc[2](arg2: u64)
+    12  :      MoveLoc[3](arg3: u64)
+    13  :      CallGeneric
+    14  :      Call[8](randomness::on_new_block)
+    15  :      MoveLoc[7](arg7: u64)
+    16  :      Call[9](reconfiguration::last_reconfiguration_time)
+    17  :      Sub
+    18  :      MoveLoc[8](loc0: u64)
+    19  :      Ge
+    20  :      BrTrue(22)
+    21  :      Branch(23)
+    22  :      Call[10](reconfiguration::reconfigure)
+    23  :      Ret
+}
+
+ fun block_prologue_common ( arg0: &signer, arg1: address, arg2: u64, arg3: u64, arg4: address, arg5: vector<u64>, arg6: vector<u8>, arg7: u64 ): u64 {
+
+L8  loc0: bool
+L9  loc1: option::Option<u64>
+L10 loc2: &mut BlockResource
+L11 loc3: NewBlockEvent
+B0:
+    0   :      CopyLoc[0](arg0: &signer)
+    1   :      Call[11](system_addresses::assert_vm)
+    2   :      CopyLoc[4](arg4: address)
+    3   :      LdConst[0](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    4   :      Eq
+    5   :      BrFalse(61)
+    6   :      LdTrue
+    7   :      StLoc[8](loc0: bool)
+    8   :      MoveLoc[8](loc0: bool)
+    9   :      BrFalse(56)
+    10  :      CallGeneric
+    11  :      StLoc[9](loc1: option::Option<u64>)
+    12  :      CopyLoc[4](arg4: address)
+    13  :      LdConst[0](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    14  :      Neq
+    15  :      BrTrue(17)
+    16  :      Branch(21)
+    17  :      CopyLoc[4](arg4: address)
+    18  :      Call[12](stake::get_validator_index)
+    19  :      CallGeneric
+    20  :      StLoc[9](loc1: option::Option<u64>)
+    21  :      LdConst[1](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1)
+    22  :      MutBorrowGlobal[0](BlockResource)
+    23  :      StLoc[10](loc2: &mut BlockResource)
+    24  :      CopyLoc[10](loc2: &mut BlockResource)
+    25  :      ImmBorrowField[0](BlockResource.new_block_events: event::EventHandle<NewBlockEvent>)
+    26  :      CallGeneric
+    27  :      CopyLoc[10](loc2: &mut BlockResource)
+    28  :      MutBorrowField[1](BlockResource.height: u64)
+    29  :      WriteRef
+    30  :      MoveLoc[1](arg1: address)
+    31  :      MoveLoc[2](arg2: u64)
+    32  :      MoveLoc[3](arg3: u64)
+    33  :      CopyLoc[10](loc2: &mut BlockResource)
+    34  :      ImmBorrowField[1](BlockResource.height: u64)
+    35  :      ReadRef
+    36  :      MoveLoc[6](arg6: vector<u8>)
+    37  :      MoveLoc[4](arg4: address)
+    38  :      CopyLoc[5](arg5: vector<u64>)
+    39  :      MoveLoc[7](arg7: u64)
+    40  :      Pack[3](NewBlockEvent)
+    41  :      StLoc[11](loc3: NewBlockEvent)
+    42  :      MoveLoc[0](arg0: &signer)
+    43  :      CopyLoc[10](loc2: &mut BlockResource)
+    44  :      MutBorrowField[0](BlockResource.new_block_events: event::EventHandle<NewBlockEvent>)
+    45  :      MoveLoc[11](loc3: NewBlockEvent)
+    46  :      Call[15](emit_new_block_event)
+    47  :      MoveLoc[9](loc1: option::Option<u64>)
+    48  :      MoveLoc[5](arg5: vector<u64>)
+    49  :      Call[16](stake::update_performance_statistics)
+    50  :      Call[17](reconfiguration::current_epoch)
+    51  :      Call[18](state_storage::on_new_block)
+    52  :      MoveLoc[10](loc2: &mut BlockResource)
+    53  :      ImmBorrowField[2](BlockResource.epoch_interval: u64)
+    54  :      ReadRef
+    55  :      Ret
+    56  :      MoveLoc[0](arg0: &signer)
+    57  :      Pop
+    58  :      LdU64(2)
+    59  :      Call[19](error::permission_denied)
+    60  :      Abort
+    61  :      CopyLoc[4](arg4: address)
+    62  :      Call[20](stake::is_current_epoch_validator)
+    63  :      StLoc[8](loc0: bool)
+    64  :      Branch(8)
+}
+
+ fun block_prologue_ext ( arg0: signer, arg1: address, arg2: u64, arg3: u64, arg4: address, arg5: vector<u64>, arg6: vector<u8>, arg7: u64, arg8: option::Option<vector<u8>> ) {
+
+L9 loc0: u64
+B0:
+    0   :      ImmBorrowLoc[0](arg0: signer)
+    1   :      MoveLoc[1](arg1: address)
+    2   :      CopyLoc[2](arg2: u64)
+    3   :      CopyLoc[3](arg3: u64)
+    4   :      MoveLoc[4](arg4: address)
+    5   :      MoveLoc[5](arg5: vector<u64>)
+    6   :      MoveLoc[6](arg6: vector<u8>)
+    7   :      CopyLoc[7](arg7: u64)
+    8   :      Call[6](block_prologue_common)
+    9   :      StLoc[9](loc0: u64)
+    10  :      ImmBorrowLoc[0](arg0: signer)
+    11  :      MoveLoc[2](arg2: u64)
+    12  :      MoveLoc[3](arg3: u64)
+    13  :      MoveLoc[8](arg8: option::Option<vector<u8>>)
+    14  :      Call[8](randomness::on_new_block)
+    15  :      MoveLoc[7](arg7: u64)
+    16  :      Call[9](reconfiguration::last_reconfiguration_time)
+    17  :      Sub
+    18  :      MoveLoc[9](loc0: u64)
+    19  :      Ge
+    20  :      BrTrue(22)
+    21  :      Branch(23)
+    22  :      Call[22](reconfiguration_with_dkg::try_start)
+    23  :      Ret
+}
+
+ fun emit_genesis_block_event ( arg0: signer ) {
+
+L1 loc0: &mut BlockResource
+B0:
+    0   :      LdConst[1](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1)
+    1   :      MutBorrowGlobal[0](BlockResource)
+    2   :      StLoc[1](loc0: &mut BlockResource)
+    3   :      ImmBorrowLoc[0](arg0: signer)
+    4   :      MoveLoc[1](loc0: &mut BlockResource)
+    5   :      MutBorrowField[0](BlockResource.new_block_events: event::EventHandle<NewBlockEvent>)
+    6   :      LdConst[0](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    7   :      LdU64(0)
+    8   :      LdU64(0)
+    9   :      LdU64(0)
+    10  :      VecPack(23, 0)
+    11  :      LdConst[0](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    12  :      VecPack(8, 0)
+    13  :      LdU64(0)
+    14  :      Pack[3](NewBlockEvent)
+    15  :      Call[15](emit_new_block_event)
+    16  :      Ret
+}
+
+ fun emit_new_block_event ( arg0: &signer, arg1: &mut event::EventHandle<NewBlockEvent>, arg2: NewBlockEvent ) {
+
+L3 loc0: &mut CommitHistory
+L4 loc1: u32
+B0:
+    0   :      LdConst[1](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1)
+    1   :      Exists[1](CommitHistory)
+    2   :      BrTrue(4)
+    3   :      Branch(38)
+    4   :      LdConst[1](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1)
+    5   :      MutBorrowGlobal[1](CommitHistory)
+    6   :      StLoc[3](loc0: &mut CommitHistory)
+    7   :      CopyLoc[3](loc0: &mut CommitHistory)
+    8   :      ImmBorrowField[3](CommitHistory.next_idx: u32)
+    9   :      ReadRef
+    10  :      StLoc[4](loc1: u32)
+    11  :      CopyLoc[3](loc0: &mut CommitHistory)
+    12  :      ImmBorrowField[4](CommitHistory.table: table_with_length::TableWithLength<u32, NewBlockEvent>)
+    13  :      CopyLoc[4](loc1: u32)
+    14  :      CallGeneric
+    15  :      BrTrue(17)
+    16  :      Branch(22)
+    17  :      CopyLoc[3](loc0: &mut CommitHistory)
+    18  :      MutBorrowField[4](CommitHistory.table: table_with_length::TableWithLength<u32, NewBlockEvent>)
+    19  :      CopyLoc[4](loc1: u32)
+    20  :      CallGeneric
+    21  :      Pop
+    22  :      CopyLoc[3](loc0: &mut CommitHistory)
+    23  :      MutBorrowField[4](CommitHistory.table: table_with_length::TableWithLength<u32, NewBlockEvent>)
+    24  :      CopyLoc[4](loc1: u32)
+    25  :      CopyLoc[2](arg2: NewBlockEvent)
+    26  :      CallGeneric
+    27  :      Nop
+    28  :      MoveLoc[4](loc1: u32)
+    29  :      LdU32(1)
+    30  :      Add
+    31  :      CopyLoc[3](loc0: &mut CommitHistory)
+    32  :      ImmBorrowField[5](CommitHistory.max_capacity: u32)
+    33  :      ReadRef
+    34  :      Mod
+    35  :      MoveLoc[3](loc0: &mut CommitHistory)
+    36  :      MutBorrowField[3](CommitHistory.next_idx: u32)
+    37  :      WriteRef
+    38  :      MoveLoc[0](arg0: &signer)
+    39  :      ImmBorrowLoc[2](arg2: NewBlockEvent)
+    40  :      ImmBorrowField[6](NewBlockEvent.proposer: address)
+    41  :      ReadRef
+    42  :      ImmBorrowLoc[2](arg2: NewBlockEvent)
+    43  :      ImmBorrowField[7](NewBlockEvent.time_microseconds: u64)
+    44  :      ReadRef
+    45  :      Call[27](timestamp::update_global_time)
+    46  :      CopyLoc[1](arg1: &mut event::EventHandle<NewBlockEvent>)
+    47  :      FreezeRef
+    48  :      CallGeneric
+    49  :      ImmBorrowLoc[2](arg2: NewBlockEvent)
+    50  :      ImmBorrowField[8](NewBlockEvent.height: u64)
+    51  :      ReadRef
+    52  :      Eq
+    53  :      BrFalse(58)
+    54  :      MoveLoc[1](arg1: &mut event::EventHandle<NewBlockEvent>)
+    55  :      MoveLoc[2](arg2: NewBlockEvent)
+    56  :      CallGeneric
+    57  :      Ret
+    58  :      MoveLoc[1](arg1: &mut event::EventHandle<NewBlockEvent>)
+    59  :      Pop
+    60  :      LdU64(1)
+    61  :      Call[4](error::invalid_argument)
+    62  :      Abort
+}
+
+ public fun emit_writeset_block_event ( arg0: &signer, arg1: address ) {
+
+L2 loc0: &mut BlockResource
+B0:
+    0   :      CopyLoc[0](arg0: &signer)
+    1   :      Call[11](system_addresses::assert_vm)
+    2   :      LdConst[1](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1)
+    3   :      MutBorrowGlobal[0](BlockResource)
+    4   :      StLoc[2](loc0: &mut BlockResource)
+    5   :      CopyLoc[2](loc0: &mut BlockResource)
+    6   :      ImmBorrowField[0](BlockResource.new_block_events: event::EventHandle<NewBlockEvent>)
+    7   :      CallGeneric
+    8   :      CopyLoc[2](loc0: &mut BlockResource)
+    9   :      MutBorrowField[1](BlockResource.height: u64)
+    10  :      WriteRef
+    11  :      MoveLoc[0](arg0: &signer)
+    12  :      CopyLoc[2](loc0: &mut BlockResource)
+    13  :      MutBorrowField[0](BlockResource.new_block_events: event::EventHandle<NewBlockEvent>)
+    14  :      MoveLoc[1](arg1: address)
+    15  :      Call[17](reconfiguration::current_epoch)
+    16  :      LdU64(18446744073709551615)
+    17  :      MoveLoc[2](loc0: &mut BlockResource)
+    18  :      ImmBorrowField[1](BlockResource.height: u64)
+    19  :      ReadRef
+    20  :      VecPack(23, 0)
+    21  :      LdConst[0](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    22  :      VecPack(8, 0)
+    23  :      Call[30](timestamp::now_microseconds)
+    24  :      Pack[3](NewBlockEvent)
+    25  :      Call[15](emit_new_block_event)
+    26  :      Ret
+}
+
+ public fun get_current_block_height (  ): u64 {
+
+B0:
+    0   :      LdConst[1](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1)
+    1   :      ImmBorrowGlobal[0](BlockResource)
+    2   :      ImmBorrowField[1](BlockResource.height: u64)
+    3   :      ReadRef
+    4   :      Ret
+}
+
+ public fun get_epoch_interval_secs (  ): u64 {
+
+B0:
+    0   :      LdConst[1](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1)
+    1   :      ImmBorrowGlobal[0](BlockResource)
+    2   :      ImmBorrowField[2](BlockResource.epoch_interval: u64)
+    3   :      ReadRef
+    4   :      LdU64(1000000)
+    5   :      Div
+    6   :      Ret
+}
+
+ public fun initialize_commit_history ( arg0: &signer, arg1: u32 ) {
+
+B0:
+    0   :      CopyLoc[1](arg1: u32)
+    1   :      LdU32(0)
+    2   :      Gt
+    3   :      BrFalse(11)
+    4   :      MoveLoc[0](arg0: &signer)
+    5   :      MoveLoc[1](arg1: u32)
+    6   :      LdU32(0)
+    7   :      CallGeneric
+    8   :      Pack[1](CommitHistory)
+    9   :      MoveTo[1](CommitHistory)
+    10  :      Ret
+    11  :      MoveLoc[0](arg0: &signer)
+    12  :      Pop
+    13  :      LdU64(3)
+    14  :      Call[4](error::invalid_argument)
+    15  :      Abort
+}
+
+ public fun update_epoch_interval_microsecs ( arg0: &signer, arg1: u64 ) {
+
+L2 loc0: &mut BlockResource
+L3 loc1: u64
+L4 loc2: &mut u64
+B0:
+    0   :      MoveLoc[0](arg0: &signer)
+    1   :      Call[1](system_addresses::assert_aptos_framework)
+    2   :      CopyLoc[1](arg1: u64)
+    3   :      LdU64(0)
+    4   :      Gt
+    5   :      BrFalse(35)
+    6   :      LdConst[1](address: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1)
+    7   :      MutBorrowGlobal[0](BlockResource)
+    8   :      StLoc[2](loc0: &mut BlockResource)
+    9   :      CopyLoc[2](loc0: &mut BlockResource)
+    10  :      ImmBorrowField[2](BlockResource.epoch_interval: u64)
+    11  :      ReadRef
+    12  :      StLoc[3](loc1: u64)
+    13  :      CopyLoc[2](loc0: &mut BlockResource)
+    14  :      MutBorrowField[2](BlockResource.epoch_interval: u64)
+    15  :      StLoc[4](loc2: &mut u64)
+    16  :      CopyLoc[1](arg1: u64)
+    17  :      MoveLoc[4](loc2: &mut u64)
+    18  :      WriteRef
+    19  :      Call[35](features::module_event_migration_enabled)
+    20  :      BrFalse(28)
+    21  :      MoveLoc[2](loc0: &mut BlockResource)
+    22  :      Pop
+    23  :      MoveLoc[3](loc1: u64)
+    24  :      MoveLoc[1](arg1: u64)
+    25  :      Pack[4](UpdateEpochInterval)
+    26  :      CallGeneric
+    27  :      Ret
+    28  :      MoveLoc[2](loc0: &mut BlockResource)
+    29  :      MutBorrowField[9](BlockResource.update_epoch_interval_events: event::EventHandle<UpdateEpochIntervalEvent>)
+    30  :      MoveLoc[3](loc1: u64)
+    31  :      MoveLoc[1](arg1: u64)
+    32  :      Pack[5](UpdateEpochIntervalEvent)
+    33  :      CallGeneric
+    34  :      Branch(27)
+    35  :      LdU64(3)
+    36  :      Call[4](error::invalid_argument)
+    37  :      Abort
+}
+
+}"
+`;
