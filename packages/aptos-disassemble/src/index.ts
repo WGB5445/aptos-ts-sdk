@@ -41,7 +41,7 @@ export function disassemble(module: MoveModule, options?: Partial<DisassemblerOp
  * Convenience function to disassemble bytecode directly to string
  */
 export function disassemble_to_string(
-  bytecode: Uint8Array | Buffer,
+  bytecode: Uint8Array,
   options?: Partial<DisassemblerOptions>
 ): string {
   const module = BytecodeLoader.loadFromBytecode(bytecode);
@@ -61,7 +61,7 @@ export class MoveDisassembler {
   }
 
   static fromBytecode(
-    bytecode: Uint8Array | Buffer,
+    bytecode: Uint8Array,
     options?: Partial<DisassemblerOptions>
   ): MoveDisassembler {
     const module = BytecodeLoader.loadFromBytecode(bytecode);

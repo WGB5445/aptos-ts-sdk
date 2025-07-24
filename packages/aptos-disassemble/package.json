@@ -36,6 +36,7 @@
   "license": "MIT",
   "packageManager": "pnpm@10.11.0",
   "devDependencies": {
+    "buffer": "^6.0.3",
     "@eslint/js": "9.31.0",
     "@types/node": "24.0.15",
     "@typescript-eslint/eslint-plugin": "8.37.0",
@@ -48,6 +49,9 @@
     "tsup": "8.5.0",
     "typescript": "5.8.3",
     "vitest": "3.2.4"
+  },
+  "peerDependencies": {
+    "buffer": ">=6.0.3"
   },
   "dependencies": {
     "aptos-bcs": "workspace:*"

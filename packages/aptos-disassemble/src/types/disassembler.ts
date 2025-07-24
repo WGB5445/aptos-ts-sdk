@@ -1,3 +1,5 @@
+
+import { Buffer } from "buffer";
 import { bcs, Deserializer } from "aptos-bcs";
 
 import {
@@ -40,7 +42,7 @@ import {
 // These should be moved from type/compiledModule.ts
 export { load_signature_token, parseAbilities, parseSignatureToken, load_code } from "./MoveModule";
 
-export function disassembleMoveModule(bytecode: Uint8Array | Buffer): MoveModule {
+export function disassembleMoveModule(bytecode: Uint8Array): MoveModule {
   const des = new Deserializer(bytecode);
 
   // get magic
