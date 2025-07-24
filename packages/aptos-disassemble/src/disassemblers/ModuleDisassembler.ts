@@ -229,7 +229,7 @@ export class ModuleDisassembler {
             }
 
             body.push(
-              `${"".padStart(4, " ")}${`${idx}`.padEnd(4, " ")}:${"".padEnd(6, " ")}${instructionStr}`
+              `${"".padStart(4, " ")}${`${idx}`.padEnd(4, " ")}:${instructionStr}`
             );
           });
         }
