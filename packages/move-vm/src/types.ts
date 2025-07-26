@@ -186,7 +186,7 @@ export class Address {
   value: string;
   constructor(value: string) {
     if (!/^0x[a-fA-F0-9]{64}$/.test(value)) {
-      throw new Error("Invalid address format");
+      throw new Error(`Invalid address format: ${value}`);
     }
     this.value = value;
   }

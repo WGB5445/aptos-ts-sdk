@@ -78,10 +78,41 @@ class Frame {
         case "LdU256":
           this.interpreterImpl.operand_stack.push(U256.from(BigInt(code.value)));
           break;
-        // case "LdConst":
-        // const constValue = this.module.constant_pool[code.constIdx];
-        // this.interpreterImpl.operand_stack.push(constValue);
-        // break;
+        case "LdConst":
+          const constValue = this.module.constant_pool[code.constIdx];
+
+          let des = new Deserializer(constValue.data);
+          switch (constValue.type.kind) {
+            case "U8":
+              this.interpreterImpl.operand_stack.push(U8.from(BigInt(des.deserializeU8())));
+              break;
+            case "U16":
+              this.interpreterImpl.operand_stack.push(U16.from(BigInt(des.deserializeU16())));
+              break;
+            case "U32":
+              this.interpreterImpl.operand_stack.push(U32.from(BigInt(des.deserializeU32())));
+              break;
+            case "U64":
+              this.interpreterImpl.operand_stack.push(U64.from(BigInt(des.deserializeU64())));
+              break;
+            case "U128":
+              this.interpreterImpl.operand_stack.push(U128.from(BigInt(des.deserializeU128())));
+              break;
+            case "U256":
+              this.interpreterImpl.operand_stack.push(U256.from(BigInt(des.deserializeU256())));
+              break;
+            case "Address":
+              this.interpreterImpl.operand_stack.push(
+                new Address(`0x${Buffer.from(constValue.data).toString("hex")}`)
+              );
+              break;
+            case "Bool":
+              this.interpreterImpl.operand_stack.push(Bool.fromBool(des.deserializeBool()));
+              break;
+            default:
+              throw new Error(`Unsupported constant type: ${constValue.type.kind}`);
+          }
+          break;
         case "LdTrue":
           this.interpreterImpl.operand_stack.push(Bool.fromBool(true));
           break;
@@ -480,6 +511,7 @@ class Frame {
     throw new Error(`Function ${this.function} did not return a value`);
   }
 }
+import { Deserializer } from "aptos-bcs";
 import {
   Stack,
   AccessControlState,
