@@ -254,35 +254,35 @@ describe("SimpleVM", () => {
       mem_module
     );
 
-    // const result = vm.callFunction(func);
+    const result = vm.callFunction(func);
 
-    // expect(result).toEqual([new U64(3n)]);
+    expect(result).toEqual([new U64(3n)]);
 
-    // const result_vector = vm.callFunction({
-    //   address: "0x0000000000000000000000000000000000000000000000000000000000001234",
-    //   module: "simple",
-    //   name: "test_vector",
-    //   type_args: [],
-    //   args: [],
-    // });
+    const result_vector = vm.callFunction({
+      address: "0x0000000000000000000000000000000000000000000000000000000000001234",
+      module: "simple",
+      name: "test_vector",
+      type_args: [],
+      args: [],
+    });
 
-    // expect(result_vector).toEqual([new Vec([new U64(1n), new U64(2n), new U64(3n)])]);
+    expect(result_vector).toEqual([new Vec([new U64(1n), new U64(2n), new U64(3n)])]);
 
-    // const result_vector_operations = vm.callFunction({
-    //   address: "0x0000000000000000000000000000000000000000000000000000000000001234",
-    //   module: "simple",
-    //   name: "test_vector_operations",
-    //   type_args: [],
-    //   args: [],
-    // });
+    const result_vector_operations = vm.callFunction({
+      address: "0x0000000000000000000000000000000000000000000000000000000000001234",
+      module: "simple",
+      name: "test_vector_operations",
+      type_args: [],
+      args: [],
+    });
 
-    // expect(result_vector_operations).toEqual([
-    //   new Vec([
-    //     new Address("0x0000000000000000000000000000000000000000000000000000000000000001"),
-    //     new Address("0x0000000000000000000000000000000000000000000000000000000000000002"),
-    //     new Address("0x0000000000000000000000000000000000000000000000000000000000000003"),
-    //   ]),
-    // ]);
+    expect(result_vector_operations).toEqual([
+      new Vec([
+        new Address("0x0000000000000000000000000000000000000000000000000000000000000001"),
+        new Address("0x0000000000000000000000000000000000000000000000000000000000000002"),
+        new Address("0x0000000000000000000000000000000000000000000000000000000000000003"),
+      ]),
+    ]);
 
     const result_vector_struct = vm.callFunction({
       address: "0x0000000000000000000000000000000000000000000000000000000000001234",
