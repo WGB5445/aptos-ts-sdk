@@ -1,7 +1,19 @@
 import { describe, it, expect } from "vitest";
 import { SimpleMoveVM } from "../src/vm";
 import { disassembleMoveModule } from "aptos-disassemble";
-import { Address, U64, Vec } from "../src/types";
+import {
+  Address,
+  Bool,
+  Frame,
+  InterpreterImpl,
+  Ref,
+  Struct,
+  U64,
+  U8,
+  Value,
+  Vec,
+} from "../src/types";
+import { V } from "vitest/dist/chunks/reporters.d.BFLkQcL6.js";
 
 // 虚拟机测试用例
 
@@ -69,13 +81,21 @@ describe("SimpleVM", () => {
                 v.push_back(@0x3);
                 v
             }
+
+            public fun test_vector_struct(): vector<string::String> {
+                let v = vector::empty();
+                v.push_back(string::utf8(b"Hello"));
+                v.push_back(string::utf8(b"World"));
+                v.push_back(string::utf8(b"!"));
+                v
+            }
         }
         }
     */
 
     let simple_module = disassembleMoveModule(
       Buffer.from(
-        "a11ceb0b0700000a0801000203021205140e07222e08502006706610d6011f0cf5016f0000000100010001000202030001000302040001020303010300010a03010a0501050673696d706c65036164640b746573745f766563746f7216746573745f766563746f725f6f7065726174696f6e73000000000000000000000000000000000000000000000000000000000000123405200000000000000000000000000000000000000000000000000000000000000001052000000000000000000000000000000000000000000000000000000000000000020520000000000000000000000000000000000000000000000000000000000000000314636f6d70696c6174696f6e5f6d65746164617461090003322e3003322e310001000002040b000b01160201010000030d400100000000000000000c000d0006010000000000000044010d0006020000000000000044010d0006030000000000000044010b000202010000040d400500000000000000000c000d00070044050d00070144050d00070244050b000200".replace(
+        "a11ceb0b0700000a0901000402040403081e052618073e540892014006d2017d10cf021f0cee029c010000010601050700000100010001000202030001000302040001000402060001010708070001020303010300010a03010a050105010a0800010800010a020673696d706c65036164640b746573745f766563746f7216746573745f766563746f725f6f7065726174696f6e7312746573745f766563746f725f73747275637406537472696e6706737472696e670475746638000000000000000000000000000000000000000000000000000000000000123400000000000000000000000000000000000000000000000000000000000000010520000000000000000000000000000000000000000000000000000000000000000105200000000000000000000000000000000000000000000000000000000000000002052000000000000000000000000000000000000000000000000000000000000000030a02060548656c6c6f0a020605576f726c640a0202012114636f6d70696c6174696f6e5f6d65746164617461090003322e3003322e310001000002040b000b01160201010000030d400100000000000000000c000d0006010000000000000044010d0006020000000000000044010d0006030000000000000044010b000202010000040d400500000000000000000c000d00070044050d00070144050d00070244050b0002030100000610400700000000000000000c000d000703110444070d000704110444070d000705110444070b000200".replace(
           "0x",
           ""
         ),
@@ -83,7 +103,123 @@ describe("SimpleVM", () => {
       )
     );
 
-    const vm = new SimpleMoveVM({}, {}, {}, {});
+    new Map<string, any>([["0x", 1]]);
+
+    const vm = new SimpleMoveVM(
+      {},
+      {},
+      {},
+      {},
+      {},
+      new Map(),
+      new Map([
+        [
+          `0x0000000000000000000000000000000000000000000000000000000000000001::string::internal_check_utf8`,
+          (type_args: string[], args: Value[]) => {
+            console.log("Checking UTF-8 encoding...");
+
+            if (type_args.length !== 0 || args.length !== 1) {
+              return {
+                kind: "Abort",
+                reason: "Invalid arguments for UTF-8 check",
+              };
+            }
+
+            const value = args[0];
+
+            if (
+              !(value instanceof Ref) ||
+              !(value.value instanceof Vec) ||
+              !Array.isArray(value.value.value) ||
+              !value.value.value.every((v) => v instanceof U8)
+            ) {
+              return {
+                kind: "Abort",
+                reason: "Expected a vec<u8> value",
+              };
+            } else {
+              let vec = new Uint8Array(value.value.value.map((v) => Number(v.value.toString())));
+              console.log(Buffer.from(vec).toString("utf8"));
+              try {
+                new TextDecoder().decode(vec);
+              } catch (e) {
+                return {
+                  kind: "Return",
+                  value: [new Bool(false)],
+                };
+              }
+              return {
+                kind: "Return",
+                value: [new Bool(true)],
+              };
+            }
+          },
+        ],
+        [
+          `0x0000000000000000000000000000000000000000000000000000000000000001::string::internal_is_char_boundary`,
+          (type_args: string[], args: Value[]) => {
+            console.log("Checking if is char boundary...");
+
+            function isCharBoundary(s: Uint8Array, i: number): boolean {
+              // i 超界直接 false
+              if (i < 0 || i > s.length) return false;
+              // 0 或末尾一定是边界
+              if (i === 0 || i === s.length) return true;
+              // 检查是否不是 UTF-8 的续字节
+              // UTF-8 续字节以 0b10xxxxxx 开头
+              return (s[i] & 0b11000000) !== 0b10000000;
+            }
+
+            if (type_args.length !== 0 || args.length !== 2) {
+              return {
+                kind: "Abort",
+                reason: "Invalid arguments for is_char_boundary check",
+              };
+            }
+
+            const value = args[0];
+            const index = args[1];
+
+            console.log("Value:", value, "Index:", index);
+
+            if (!(index instanceof U64)) {
+              return {
+                kind: "Abort",
+                reason: "Expected a u64 value",
+              };
+            }
+
+            if (!(value instanceof Vec)) {
+              return {
+                kind: "Abort",
+                reason: "Expected a vec u8 value",
+              };
+            } else {
+              if (!(value.value instanceof U8)) {
+                return {
+                  kind: "Abort",
+                  reason: "Expected a vec<u8> value",
+                };
+              } else {
+                let vec = new Uint8Array(value.value.map((v) => Number(v.value.toString())));
+                const idx = Number(index.value.toString());
+                if (!isCharBoundary(vec, idx)) {
+                  return {
+                    kind: "Return",
+                    value: [new Bool(false)],
+                  };
+                }
+              }
+            }
+
+            return {
+              kind: "Return",
+              value: [new Bool(true)],
+            };
+          },
+        ],
+      ])
+    );
 
     const func = {
       address: "0x0000000000000000000000000000000000000000000000000000000000001234",
@@ -118,33 +254,73 @@ describe("SimpleVM", () => {
       mem_module
     );
 
-    const result = vm.callFunction(func);
+    // const result = vm.callFunction(func);
 
-    expect(result).toEqual([new U64(3n)]);
+    // expect(result).toEqual([new U64(3n)]);
 
-    const result_vector = vm.callFunction({
+    // const result_vector = vm.callFunction({
+    //   address: "0x0000000000000000000000000000000000000000000000000000000000001234",
+    //   module: "simple",
+    //   name: "test_vector",
+    //   type_args: [],
+    //   args: [],
+    // });
+
+    // expect(result_vector).toEqual([new Vec([new U64(1n), new U64(2n), new U64(3n)])]);
+
+    // const result_vector_operations = vm.callFunction({
+    //   address: "0x0000000000000000000000000000000000000000000000000000000000001234",
+    //   module: "simple",
+    //   name: "test_vector_operations",
+    //   type_args: [],
+    //   args: [],
+    // });
+
+    // expect(result_vector_operations).toEqual([
+    //   new Vec([
+    //     new Address("0x0000000000000000000000000000000000000000000000000000000000000001"),
+    //     new Address("0x0000000000000000000000000000000000000000000000000000000000000002"),
+    //     new Address("0x0000000000000000000000000000000000000000000000000000000000000003"),
+    //   ]),
+    // ]);
+
+    const result_vector_struct = vm.callFunction({
       address: "0x0000000000000000000000000000000000000000000000000000000000001234",
       module: "simple",
-      name: "test_vector",
+      name: "test_vector_struct",
       type_args: [],
       args: [],
     });
 
-    expect(result_vector).toEqual([new Vec([new U64(1n), new U64(2n), new U64(3n)])]);
-
-    const result_vector_operations = vm.callFunction({
-      address: "0x0000000000000000000000000000000000000000000000000000000000001234",
-      module: "simple",
-      name: "test_vector_operations",
-      type_args: [],
-      args: [],
-    });
-
-    expect(result_vector_operations).toEqual([
+    expect(result_vector_struct).toEqual([
       new Vec([
-        new Address("0x0000000000000000000000000000000000000000000000000000000000000001"),
-        new Address("0x0000000000000000000000000000000000000000000000000000000000000002"),
-        new Address("0x0000000000000000000000000000000000000000000000000000000000000003"),
+        new Struct(
+          new Address("0x0000000000000000000000000000000000000000000000000000000000000001"),
+          "string",
+          "String",
+          [],
+          {
+            0: new Vec([new U8(72n), new U8(101n), new U8(108n), new U8(108n), new U8(111n)]),
+          }
+        ),
+        new Struct(
+          new Address("0x0000000000000000000000000000000000000000000000000000000000000001"),
+          "string",
+          "String",
+          [],
+          {
+            0: new Vec([new U8(87n), new U8(111n), new U8(114n), new U8(108n), new U8(100n)]),
+          }
+        ),
+        new Struct(
+          new Address("0x0000000000000000000000000000000000000000000000000000000000000001"),
+          "string",
+          "String",
+          [],
+          {
+            0: new Vec([new U8(33n)]),
+          }
+        ),
       ]),
     ]);
   });

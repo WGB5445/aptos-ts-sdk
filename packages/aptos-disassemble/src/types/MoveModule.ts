@@ -181,6 +181,8 @@ export enum Ability {
 
 export type AbilitySet = number;
 
+
+
 // --- Re-export SignatureToken ---
 export type SignatureToken =
   | ({ kind: "Bool" } & { __signatureTokenBrand: true })

@@ -1,517 +1,3 @@
-// 栈帧结构
-class Frame {
-  pc: number;
-  module: MoveModule;
-  function: FunctionDefinition;
-  callType: string;
-  locals: any[];
-  localTys: any[];
-  interpreterImpl: InterpreterImpl;
-  // 可扩展其他字段
-  constructor({
-    pc,
-    module,
-    functionDef,
-    callType,
-    locals,
-    localTys,
-    interpreterImpl,
-  }: {
-    pc?: number;
-    module: MoveModule;
-    functionDef: any;
-    callType?: string;
-    locals: any[];
-    localTys: any[];
-    interpreterImpl: InterpreterImpl;
-  }) {
-    this.pc = pc ?? 0;
-    this.module = module;
-    this.function = functionDef;
-    this.callType = callType ?? "Call";
-    this.locals = locals;
-    this.localTys = localTys;
-    this.interpreterImpl = interpreterImpl;
-  }
-
-  execute(): ExitCode {
-    const codes = this.function.code!.code;
-    if (!codes) {
-      throw new Error("Function code is not defined");
-    }
-
-    while (this.pc < codes.length) {
-      const code = codes[this.pc];
-      console.log(
-        `Executing instruction at pc ${this.pc}: ${JSON.stringify(code, (_, value) => {
-          return typeof value === "bigint" ? value.toString() : value;
-        })}`
-      );
-      switch (code.kind) {
-        case "Pop":
-          this.interpreterImpl.operand_stack.pop();
-          break;
-        case "BrTrue":
-          this.interpreterImpl.operand_stack.pop_as(Bool) ? (this.pc = code.codeOffset) : this.pc++;
-          break;
-        case "BrFalse":
-          this.interpreterImpl.operand_stack.pop_as(Bool) ? this.pc++ : (this.pc = code.codeOffset);
-          break;
-        case "Branch":
-          this.pc = code.codeOffset;
-          break;
-        case "LdU8":
-          this.interpreterImpl.operand_stack.push(U8.from(BigInt(code.value)));
-          break;
-        case "LdU16":
-          this.interpreterImpl.operand_stack.push(U16.from(BigInt(code.value)));
-          break;
-        case "LdU32":
-          this.interpreterImpl.operand_stack.push(U32.from(BigInt(code.value)));
-          break;
-        case "LdU64":
-          this.interpreterImpl.operand_stack.push(U64.from(BigInt(code.value)));
-          break;
-        case "LdU128":
-          this.interpreterImpl.operand_stack.push(U128.from(BigInt(code.value)));
-          break;
-        case "LdU256":
-          this.interpreterImpl.operand_stack.push(U256.from(BigInt(code.value)));
-          break;
-        case "LdConst":
-          const constValue = this.module.constant_pool[code.constIdx];
-
-          let des = new Deserializer(constValue.data);
-          switch (constValue.type.kind) {
-            case "U8":
-              this.interpreterImpl.operand_stack.push(U8.from(BigInt(des.deserializeU8())));
-              break;
-            case "U16":
-              this.interpreterImpl.operand_stack.push(U16.from(BigInt(des.deserializeU16())));
-              break;
-            case "U32":
-              this.interpreterImpl.operand_stack.push(U32.from(BigInt(des.deserializeU32())));
-              break;
-            case "U64":
-              this.interpreterImpl.operand_stack.push(U64.from(BigInt(des.deserializeU64())));
-              break;
-            case "U128":
-              this.interpreterImpl.operand_stack.push(U128.from(BigInt(des.deserializeU128())));
-              break;
-            case "U256":
-              this.interpreterImpl.operand_stack.push(U256.from(BigInt(des.deserializeU256())));
-              break;
-            case "Address":
-              this.interpreterImpl.operand_stack.push(
-                new Address(`0x${Buffer.from(constValue.data).toString("hex")}`)
-              );
-              break;
-            case "Bool":
-              this.interpreterImpl.operand_stack.push(Bool.fromBool(des.deserializeBool()));
-              break;
-            default:
-              throw new Error(`Unsupported constant type: ${constValue.type.kind}`);
-          }
-          break;
-        case "LdTrue":
-          this.interpreterImpl.operand_stack.push(Bool.fromBool(true));
-          break;
-        case "LdFalse":
-          this.interpreterImpl.operand_stack.push(Bool.fromBool(false));
-          break;
-        case "CopyLoc":
-          const localIndex = code.localIdx;
-          if (localIndex < 0 || localIndex >= this.locals.length) {
-            throw new Error(`Invalid local index: ${localIndex}`);
-          }
-          this.interpreterImpl.operand_stack.push(this.locals[localIndex]);
-          break;
-        case "MoveLoc":
-          const moveLocalIndex = code.localIdx;
-          if (moveLocalIndex < 0 || moveLocalIndex >= this.locals.length) {
-            throw new Error(`Invalid local index: ${moveLocalIndex}`);
-          }
-          if (this.locals[moveLocalIndex] === undefined) {
-            throw new Error(`Local variable at index ${moveLocalIndex} is not initialized`);
-          }
-          this.interpreterImpl.operand_stack.push(this.locals[moveLocalIndex]);
-          this.locals[moveLocalIndex] = undefined; // 清除局部变量
-          break;
-        case "StLoc":
-          const stLocalIndex = code.localIdx;
-          if (stLocalIndex < 0 || stLocalIndex >= this.locals.length) {
-            throw new Error(`Invalid local index: ${stLocalIndex}`);
-          }
-          const valueToStore = this.interpreterImpl.operand_stack.pop();
-          this.locals[stLocalIndex] = valueToStore;
-          break;
-        case "Add":
-          const right = this.interpreterImpl.operand_stack.pop();
-          const left = this.interpreterImpl.operand_stack.pop();
-          if (!isNumberValue(left) || !isNumberValue(right)) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((right as Object).constructor.name === (left as Object).constructor.name) {
-            this.interpreterImpl.operand_stack.push(
-              NumberType[left.constructor.name].from(
-                (left.value as bigint) + (right.value as bigint)
-              )
-            );
-          } else {
-            throw new Error("Type mismatch");
-          }
-          break;
-        case "Sub":
-          const subRight = this.interpreterImpl.operand_stack.pop();
-          const subLeft = this.interpreterImpl.operand_stack.pop();
-          if (!isNumberValue(subLeft) || !isNumberValue(subRight)) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((subRight as Object).constructor.name === (subLeft as Object).constructor.name) {
-            this.interpreterImpl.operand_stack.push(
-              new NumberType[subLeft.constructor.name](
-                (subLeft.value as bigint) - (subRight.value as bigint)
-              )
-            );
-          } else {
-            throw new Error("Type mismatch");
-          }
-          break;
-        case "Mul":
-          const mulRight = this.interpreterImpl.operand_stack.pop();
-          const mulLeft = this.interpreterImpl.operand_stack.pop();
-          if (!isNumberValue(mulLeft) || !isNumberValue(mulRight)) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((mulRight as Object).constructor.name === (mulLeft as Object).constructor.name) {
-            this.interpreterImpl.operand_stack.push(
-              new NumberType[mulLeft.constructor.name](
-                (mulLeft.value as bigint) * (mulRight.value as bigint)
-              )
-            );
-          } else {
-            throw new Error("Type mismatch");
-          }
-          break;
-        case "Div":
-          const divRight = this.interpreterImpl.operand_stack.pop();
-          const divLeft = this.interpreterImpl.operand_stack.pop();
-          if (!isNumberValue(divLeft) || !isNumberValue(divRight)) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((divRight as Object).constructor.name !== (divLeft as Object).constructor.name) {
-            throw new Error("Type mismatch");
-          }
-          if (divLeft.value === 0n) {
-            throw new Error("Division by zero");
-          }
-          this.interpreterImpl.operand_stack.push(
-            new NumberType[divLeft.constructor.name](
-              (divLeft.value as bigint) / (divRight.value as bigint)
-            )
-          );
-          break;
-        case "Mod":
-          const modRight = this.interpreterImpl.operand_stack.pop();
-          const modLeft = this.interpreterImpl.operand_stack.pop();
-          if (!isNumberValue(modLeft) || !isNumberValue(modRight)) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((modRight as Object).constructor.name !== (modLeft as Object).constructor.name) {
-            throw new Error("Type mismatch");
-          }
-          if (modRight.value === 0n) {
-            throw new Error("Division by zero");
-          }
-          this.interpreterImpl.operand_stack.push(
-            new NumberType[modLeft.constructor.name](
-              (modLeft.value as bigint) % (modRight.value as bigint)
-            )
-          );
-          break;
-        case "Eq":
-          const eqRight = this.interpreterImpl.operand_stack.pop();
-          const eqLeft = this.interpreterImpl.operand_stack.pop();
-          if (!isNumberValue(eqLeft) || !isNumberValue(eqRight)) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((eqRight as Object).constructor.name !== (eqLeft as Object).constructor.name) {
-            throw new Error("Type mismatch");
-          }
-          this.interpreterImpl.operand_stack.push(
-            Bool.fromBool((eqLeft.value as bigint) == (eqRight.value as bigint))
-          );
-          break;
-        case "Neq":
-          const neqRight = this.interpreterImpl.operand_stack.pop();
-          const neqLeft = this.interpreterImpl.operand_stack.pop();
-          if (!isNumberValue(neqLeft) || !isNumberValue(neqRight)) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((neqRight as Object).constructor.name !== (neqLeft as Object).constructor.name) {
-            throw new Error("Type mismatch");
-          }
-
-          this.interpreterImpl.operand_stack.push(Bool.fromBool(neqLeft.value !== neqRight.value));
-          break;
-        case "Gt":
-          const gtRight = this.interpreterImpl.operand_stack.pop();
-          const gtLeft = this.interpreterImpl.operand_stack.pop();
-          if (!isNumberValue(gtLeft) || !isNumberValue(gtRight)) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((gtRight as Object).constructor.name !== (gtLeft as Object).constructor.name) {
-            throw new Error("Type mismatch");
-          }
-          this.interpreterImpl.operand_stack.push(Bool.fromBool(gtLeft.value > gtRight.value));
-          break;
-        case "Lt":
-          const ltRight = this.interpreterImpl.operand_stack.pop();
-          const ltLeft = this.interpreterImpl.operand_stack.pop();
-          this.interpreterImpl.operand_stack.push(Bool.fromBool(ltLeft.value < ltRight.value));
-          break;
-        case "Le":
-          const leRight = this.interpreterImpl.operand_stack.pop();
-          const leLeft = this.interpreterImpl.operand_stack.pop();
-          this.interpreterImpl.operand_stack.push(Bool.fromBool(leLeft.value <= leRight.value));
-          break;
-        case "Ge":
-          const geRight = this.interpreterImpl.operand_stack.pop();
-          const geLeft = this.interpreterImpl.operand_stack.pop();
-          this.interpreterImpl.operand_stack.push(Bool.fromBool(geLeft.value >= geRight.value));
-          break;
-        case "BitOr":
-          const borRight = this.interpreterImpl.operand_stack.pop();
-          const borLeft = this.interpreterImpl.operand_stack.pop();
-          if (!(borLeft as any).isNumber && !(borRight as any).isNumber) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((borRight as Object).constructor.name !== (borLeft as Object).constructor.name) {
-            throw new Error("Type mismatch");
-          }
-
-          this.interpreterImpl.operand_stack.push(
-            new NumberType[borLeft.constructor.name](
-              (borLeft.value as bigint) | (borRight.value as bigint)
-            )
-          );
-          break;
-        case "BitAnd":
-          const bandRight = this.interpreterImpl.operand_stack.pop();
-          const bandLeft = this.interpreterImpl.operand_stack.pop();
-          if (!(bandLeft as any).isNumber && !(bandRight as any).isNumber) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((bandRight as Object).constructor.name !== (bandLeft as Object).constructor.name) {
-            throw new Error("Type mismatch");
-          }
-          this.interpreterImpl.operand_stack.push(
-            new NumberType[bandLeft.constructor.name](
-              (bandLeft.value as bigint) & (bandRight.value as bigint)
-            )
-          );
-          break;
-        case "Xor":
-          const xorRight = this.interpreterImpl.operand_stack.pop();
-          const xorLeft = this.interpreterImpl.operand_stack.pop();
-          if (!(xorLeft as any).isNumber && !(xorRight as any).isNumber) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((xorRight as Object).constructor.name !== (xorLeft as Object).constructor.name) {
-            throw new Error("Type mismatch");
-          }
-          this.interpreterImpl.operand_stack.push(
-            new NumberType[xorLeft.constructor.name](
-              (xorLeft.value as bigint) ^ (xorRight.value as bigint)
-            )
-          );
-          break;
-        case "Shl":
-          const shlRight = this.interpreterImpl.operand_stack.pop();
-          const shlLeft = this.interpreterImpl.operand_stack.pop();
-          if (!(shlLeft as any).isNumber && !(shlRight as any).isNumber) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((shlRight as Object).constructor.name !== (shlLeft as Object).constructor.name) {
-            throw new Error("Type mismatch");
-          }
-          this.interpreterImpl.operand_stack.push(
-            new NumberType[shlLeft.constructor.name](
-              (shlLeft.value as bigint) << (shlRight.value as bigint)
-            )
-          );
-          break;
-        case "Shr":
-          const shrRight = this.interpreterImpl.operand_stack.pop();
-          const shrLeft = this.interpreterImpl.operand_stack.pop();
-          if (!(shrLeft as any).isNumber && !(shrRight as any).isNumber) {
-            throw new Error("Operands must be numbers");
-          }
-          if ((shrRight as Object).constructor.name !== (shrLeft as Object).constructor.name) {
-            throw new Error("Type mismatch");
-          }
-          this.interpreterImpl.operand_stack.push(
-            new NumberType[shrLeft.constructor.name](
-              (shrLeft.value as bigint) >> (shrRight.value as bigint)
-            )
-          );
-          break;
-        case "Or":
-          const orRight = this.interpreterImpl.operand_stack.pop();
-          const orLeft = this.interpreterImpl.operand_stack.pop();
-          if (!(orLeft instanceof Bool) || !(orRight instanceof Bool)) {
-            throw new Error("Operands must be booleans");
-          }
-          this.interpreterImpl.operand_stack.push(Bool.fromBool(orLeft.value || orRight.value));
-          break;
-        case "And":
-          const andRight = this.interpreterImpl.operand_stack.pop();
-          const andLeft = this.interpreterImpl.operand_stack.pop();
-          if (!(andLeft instanceof Bool) || !(andRight instanceof Bool)) {
-            throw new Error("Operands must be booleans");
-          }
-          this.interpreterImpl.operand_stack.push(Bool.fromBool(andLeft.value && andRight.value));
-          break;
-        case "Not":
-          const notValue = this.interpreterImpl.operand_stack.pop();
-          this.interpreterImpl.operand_stack.push(Bool.fromBool(!notValue.value));
-          break;
-        case "Nop":
-          // No operation, just continue
-          break;
-        case "Abort":
-          const abortValue = this.interpreterImpl.operand_stack.pop_as(U64);
-          return { kind: "Abort", value: abortValue.value };
-        case "Ret":
-          return { kind: "Return" };
-        case "MutBorrowLoc":
-        case "ImmBorrowLoc":
-          const borrowLocalIndex = code.localIdx;
-          if (borrowLocalIndex < 0 || borrowLocalIndex >= this.locals.length) {
-            throw new Error(`Invalid local index: ${borrowLocalIndex}`);
-          }
-          const borrowValue = this.locals[borrowLocalIndex];
-          if (borrowValue === undefined) {
-            throw new Error(`Local variable at index ${borrowLocalIndex} is not initialized`);
-          }
-          if (borrowValue !== undefined) {
-            if (!(borrowValue instanceof Ref)) {
-              this.interpreterImpl.operand_stack.push(new Ref(borrowValue));
-            } else {
-              throw new Error("Cannot borrow a reference");
-            }
-          }
-          break;
-        case "VecPack": {
-          const vecSize = Number(code.numElements.toString());
-          const type = code.elemTyIdx;
-          const elemType = this.module.signatures[type][0];
-
-          switch (elemType.kind) {
-            case "U8":
-              this.interpreterImpl.operand_stack.push(
-                new Vec<U8>(
-                  Array.from({ length: vecSize }, () =>
-                    this.interpreterImpl.operand_stack.pop_as(U8)
-                  )
-                )
-              );
-              break;
-            case "U16":
-              this.interpreterImpl.operand_stack.push(
-                new Vec<U16>(
-                  Array.from({ length: vecSize }, () =>
-                    this.interpreterImpl.operand_stack.pop_as(U16)
-                  )
-                )
-              );
-              break;
-            case "U32":
-              this.interpreterImpl.operand_stack.push(
-                new Vec<U32>(
-                  Array.from({ length: vecSize }, () =>
-                    this.interpreterImpl.operand_stack.pop_as(U32)
-                  )
-                )
-              );
-              break;
-            case "U64":
-              this.interpreterImpl.operand_stack.push(
-                new Vec<U64>(
-                  Array.from({ length: vecSize }, () =>
-                    this.interpreterImpl.operand_stack.pop_as(U64)
-                  )
-                )
-              );
-              break;
-            case "U128":
-              this.interpreterImpl.operand_stack.push(
-                new Vec<U128>(
-                  Array.from({ length: vecSize }, () =>
-                    this.interpreterImpl.operand_stack.pop_as(U128)
-                  )
-                )
-              );
-              break;
-            case "U256":
-              this.interpreterImpl.operand_stack.push(
-                new Vec<U256>(
-                  Array.from({ length: vecSize }, () =>
-                    this.interpreterImpl.operand_stack.pop_as(U256)
-                  )
-                )
-              );
-              break;
-            case "Address":
-              this.interpreterImpl.operand_stack.push(
-                new Vec<Address>(
-                  Array.from({ length: vecSize }, () =>
-                    this.interpreterImpl.operand_stack.pop_as(Address)
-                  )
-                )
-              );
-              break;
-            case "Bool":
-              this.interpreterImpl.operand_stack.push(
-                new Vec<Bool>(
-                  Array.from({ length: vecSize }, () =>
-                    this.interpreterImpl.operand_stack.pop_as(Bool)
-                  )
-                )
-              );
-              break;
-            default:
-              throw new Error(`Unsupported vector element type: ${elemType.kind}`);
-          }
-
-          break;
-        }
-
-        case "VecPushBack": {
-          let elem = this.interpreterImpl.operand_stack.pop();
-          const ref = this.interpreterImpl.operand_stack.pop_as(Ref<Vec<Value>>);
-
-          ref.get().push(elem);
-          break;
-        }
-
-        default:
-          throw new Error(
-            `Unknown instruction at pc ${this.pc}: ${JSON.stringify(
-              code,
-              (_, value) => {
-                return typeof value === "bigint" ? value.toString() : value;
-              },
-              2
-            )}`
-          );
-      }
-      this.pc++;
-    }
-    throw new Error(`Function ${this.function} did not return a value`);
-  }
-}
-import { Deserializer } from "aptos-bcs";
 import {
   Stack,
   AccessControlState,
@@ -533,13 +19,28 @@ import {
   Vec,
   Value,
   Address,
+  Struct,
+  Frame,
 } from "./types";
-import { FunctionDefinition, FunctionHandle, MoveModule } from "aptos-disassemble";
+import { FunctionDefinition, FunctionHandle, MoveModule, SignatureToken } from "aptos-disassemble";
 
 export class SimpleMoveVM {
   interpreter: InterpreterImpl;
+  call_stack: Frame[];
   state: any;
   module_map: Map<string, MoveModule>;
+  native_functions: Map<
+    string,
+    (
+      type_args: string[],
+      args: Value[]
+    ) => {
+      kind: "Return" | "Abort" | "Call";
+      value?: Value[];
+      handle?: number;
+      reason?: string;
+    }
+  >;
 
   constructor(
     vm_config: VMConfig,
@@ -547,7 +48,19 @@ export class SimpleMoveVM {
     reentrancy_checker: ReentrancyChecker,
     ty_depth_checker: TypeDepthChecker,
     state?: any,
-    module_map?: Map<string, MoveModule>
+    module_map?: Map<string, MoveModule>,
+    native_functions?: Map<
+      string,
+      (
+        type_args: string[],
+        args: Value[]
+      ) => {
+        kind: "Return" | "Abort" | "Call";
+        value?: Value[];
+        handle?: number;
+        reason?: string;
+      }
+    >
   ) {
     this.interpreter = new InterpreterImpl(
       vm_config,
@@ -556,7 +69,9 @@ export class SimpleMoveVM {
       ty_depth_checker
     );
     this.state = state || {};
+    this.call_stack = [];
     this.module_map = module_map || new Map<string, MoveModule>();
+    this.native_functions = native_functions || new Map();
   }
 
   execute_code() {
@@ -571,25 +86,21 @@ export class SimpleMoveVM {
     type_args: string[];
     args: any[];
   }): any {
-    // 找 code
-    const code = this.module_map.get(`${func.address}::${func.module}`);
-    if (!code) {
-      throw new Error(`Module ${func.address}::${func.module} not found`);
-    }
+    let module_code = this.find_module(func.address, func.module);
 
-    let func_name_index = code.identifiers.findIndex((id) => id === func.name);
+    let func_name_index = module_code.identifiers.findIndex((id) => id === func.name);
     if (func_name_index === -1) {
       throw new Error(`Function ${func.name} not found in module ${func.address}::${func.module}`);
     }
 
-    let function_handle_index = code.function_handles.findIndex((handle) => {
+    let function_handle_index = module_code.function_handles.findIndex((handle) => {
       return handle.name === func_name_index;
     });
     if (function_handle_index === -1) {
       throw new Error(`Function handle for ${func.name} not found`);
     }
 
-    let function_def = code.function_defs.find((def) => {
+    let function_def = module_code.function_defs.find((def) => {
       return def.function === function_handle_index;
     });
     if (!function_def) {
@@ -600,17 +111,14 @@ export class SimpleMoveVM {
       throw new Error(`Function ${func.name} is native`);
     }
 
-    let locals_signatures = code.signatures[function_def.code.locals];
+    let locals_signatures = module_code.signatures[function_def.code.locals];
     if (!locals_signatures) {
       throw new Error(`Locals signatures for function ${func.name} not found`);
     }
 
-    const function_handle = code.function_handles[function_handle_index];
-    if (!function_handle) {
-      throw new Error(`Function handle for ${func.name} not found`);
-    }
+    const function_handle = this.get_function_handle(module_code, function_handle_index);
 
-    const parameters_signatures = code.signatures[function_handle.parameters];
+    const parameters_signatures = module_code.signatures[function_handle.parameters];
     if (!parameters_signatures) {
       throw new Error(`Parameters signatures for function ${func.name} not found`);
     }
@@ -630,9 +138,9 @@ export class SimpleMoveVM {
     });
 
     // 创建栈帧
-    const frame = new Frame({
+    let frame = new Frame({
       pc: 0,
-      module: code,
+      module: module_code,
       functionDef: function_def,
       callType: "Call",
       locals,
@@ -640,19 +148,125 @@ export class SimpleMoveVM {
       interpreterImpl: this.interpreter,
     });
 
-    let result = frame.execute();
-    if (result.kind === "Return") {
-      let return_signatures = code.signatures[function_handle.return_];
-      if (return_signatures.length === 0) {
-        return undefined; // 无返回值
-      } else {
-        return this.interpreter.operand_stack.popn(return_signatures.length);
-      }
-    } else if (result.kind === "Abort") {
-      throw new Error(`Execution aborted with value: ${result.value}`);
-    }
+    while (1) {
+      let result = frame.execute();
+      if (result.kind === "Return") {
+        let old_frame = this.call_stack.pop();
+        if (old_frame === undefined) {
+          let return_signatures = frame.module.signatures[function_handle.return_];
+          if (return_signatures.length === 0) {
+            return undefined;
+          } else {
+            return this.interpreter.operand_stack.popn(return_signatures.length);
+          }
+        } else {
+          frame = old_frame;
+          frame.pc++;
+        }
+      } else if (result.kind === "Abort") {
+        throw new Error(`Execution aborted with value: ${result.value}`);
+      } else if (result.kind === "Call") {
+        if (this.call_stack.length >= 5) {
+          throw new Error("Call stack size limit exceeded");
+        }
 
-    return result;
+        let old_function_handle = frame.module.function_handles[result.handle];
+        if (!old_function_handle) {
+          throw new Error(`Function handle for index ${result.handle} not found`);
+        }
+
+        let new_function_module_handle = frame.module.module_handles[old_function_handle.module];
+        let new_function_address =
+          frame.module.address_identifiers[new_function_module_handle.address];
+        let new_function_module = frame.module.identifiers[new_function_module_handle.name];
+        let new_function_name = frame.module.identifiers[old_function_handle.name];
+        const module = this.find_module(`0x${new_function_address}`, new_function_module);
+
+        console.log(
+          `Calling function ${new_function_module}::${new_function_name} with address 0x${new_function_address}`
+        );
+
+        let new_function_ident_index = module.identifiers.findIndex(
+          (id) => id === new_function_name
+        );
+        if (new_function_ident_index === -1) {
+          throw new Error(
+            `Function ${new_function_name} not found in module ${new_function_module}`
+          );
+        }
+
+        let new_function_handle_index = module.function_handles.findIndex(
+          (f) => f.name === new_function_ident_index
+        );
+        if (new_function_handle_index === -1) {
+          throw new Error(`Function handle for ${new_function_name} not found`);
+        }
+        let new_function_handle = module.function_handles[new_function_handle_index];
+        if (!new_function_handle) {
+          throw new Error(`Function handle for ${new_function_name} not found`);
+        }
+
+        let new_function_definition = module.function_defs.find(
+          (def) => def.function === new_function_handle_index
+        );
+        if (!new_function_definition) {
+          throw new Error(`Function definition for handle ${result.handle} not found`);
+        }
+
+        let locals_signatures = module.signatures[function_def.code.locals];
+        if (!locals_signatures) {
+          throw new Error(`Locals signatures for function ${func.name} not found`);
+        }
+
+        const parameters_signatures = module.signatures[new_function_handle.parameters];
+        if (!parameters_signatures) {
+          throw new Error(`Parameters signatures for function ${func.name} not found`);
+        }
+
+        if (!new_function_definition.code) {
+          let new_function = `0x${new_function_address}::${new_function_module}::${new_function_name}`;
+          console.log(`Calling native function: ${new_function}`);
+          let nativeFunction = this.native_functions.get(new_function);
+          if (nativeFunction) {
+            const args = parameters_signatures.map((_) => {
+              return this.interpreter.operand_stack.pop();
+            });
+            let result = nativeFunction([], args);
+            if (result.kind === "Return") {
+              result.value?.forEach((value) => {
+                this.interpreter.operand_stack.push(value);
+              });
+              frame.pc++;
+            } else if (result.kind === "Abort") {
+              throw new Error(
+                `Native function ${new_function_name} aborted with value: ${result.reason}`
+              );
+            }
+            continue;
+          }
+          throw new Error(`Native function ${new_function_name} not found`);
+        }
+
+        this.call_stack.push(frame);
+
+        const localCount = locals_signatures.length + parameters_signatures.length;
+        const locals = new Array(localCount).fill(undefined);
+
+        if (parameters_signatures.length > 0) {
+          console.log("Parameters count:", parameters_signatures.length);
+          for (let i = 0; i < parameters_signatures.length; i++) {
+            locals[i] = this.interpreter.operand_stack.pop();
+          }
+        }
+        frame = this.create_call_frame(
+          module,
+          new_function_definition,
+          "Call",
+          locals,
+          locals_signatures
+        );
+      }
+    }
   }
 
   execute(func: {
@@ -663,5 +277,48 @@ export class SimpleMoveVM {
     args: any[];
   }) {
     return this.callFunction(func);
+  }
+
+  find_module(address: string, module: string): MoveModule {
+    const moduleKey = `${address}::${module}`;
+    const foundModule = this.module_map.get(moduleKey);
+    if (!foundModule) {
+      throw new Error(`Module ${moduleKey} not found`);
+    }
+    return foundModule;
+  }
+
+  get_function_handle(module: MoveModule, functionIndex: number): FunctionHandle {
+    const functionHandle = module.function_handles[functionIndex];
+    if (!functionHandle) {
+      throw new Error(`Function handle for index ${functionIndex} not found`);
+    }
+    return functionHandle;
+  }
+
+  get_function_definition(module: MoveModule, functionIndex: number): FunctionDefinition {
+    const functionDef = module.function_defs.find((def) => def.function === functionIndex);
+    if (!functionDef) {
+      throw new Error(`Function definition for index ${functionIndex} not found`);
+    }
+    return functionDef;
+  }
+
+  create_call_frame(
+    module: MoveModule,
+    functionDef: FunctionDefinition,
+    callType: string = "Call",
+    locals: any[] = [],
+    localTys: SignatureToken[] = []
+  ): Frame {
+    return new Frame({
+      pc: 0,
+      module,
+      functionDef,
+      callType,
+      locals,
+      localTys,
+      interpreterImpl: this.interpreter,
+    });
   }
 }
